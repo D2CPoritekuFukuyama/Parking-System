@@ -12,6 +12,14 @@
 
 
 
+Labeling::Labeling(){
+    videoCapture = cvCreateCameraCapture( 0 );
+    frame = cvQueryFrame(videoCapture);
+    gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
+    bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
+    resutl_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
+}
+
 void Labeling::DrawNextContour(
                 IplImage *img,//ラベリング結果を描画するIplImage(8Bit3chカラー）
                 CvSeq *Contour, //輪郭へのポインタ
@@ -42,6 +50,10 @@ void Labeling::DrawNextContour(
         
         if(approx->total == 4 && Area >= 1000 && Area <= 6000) //頂点が4で面積が100以上なら描画
         {
+            for (int i = 0; i < approx -> total; ++i) {
+                CvPoint *p = (CvPoint*)cvGetSeqElem(approx, i);
+                printf("%d %d\n", p -> x, p -> y);
+            }
             cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
             
             if (Contour -> h_next != NULL)
