@@ -23,14 +23,26 @@ private:
                          int Level //輪郭のレベル（階層）
     );
 public:
+    IplImage *frame; //webカメラの画像格納用
+    IplImage *gray_img;//グレースケール画像
+    IplImage *bin_img;//2値化画像
+    IplImage *resutl_img;//ラベリング結果
+    CvCapture *videoCapture;
+    
+    Labeling();
+    
     void cv_Labelling(
                       IplImage *src_img,
                       IplImage *dst_img
                       );
+    
     void Binarization(
                       IplImage *src_img,
                       IplImage *dst_img
                       );
+    
+    
+
     
 };
 
