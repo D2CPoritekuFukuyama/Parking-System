@@ -22,11 +22,13 @@ private:
                          CvSeq *Contour, //輪郭へのポインタ
                          int Level //輪郭のレベル（階層）
     );
+    bool check_rectangle(CvSeq *Nplate_point);
 public:
     IplImage *frame; //webカメラの画像格納用
     IplImage *gray_img;//グレースケール画像
     IplImage *bin_img;//2値化画像
     IplImage *resutl_img;//ラベリング結果
+    CvMat *Nplate_point;
     CvCapture *videoCapture;
     
     Labeling();
