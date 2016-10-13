@@ -11,8 +11,8 @@
 #include "highgui.h"
 #include "cxcore.h"
 
-#define TOLERANCE1 50
-#define TOLERANCE2 -50
+#define TOLERANCE 50
+
 
 
 Labeling::Labeling(){
@@ -77,13 +77,11 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
     }
    
     //1:2の比率に近く、直角に近ければtrue
-    if(diffe[0][0] - (2 * diffe[0][1]) <= TOLERANCE1 &&
-       diffe[0][0] - (2 * diffe[0][1]) >= TOLERANCE2)
+    if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE)
     {
-        if(diffe[1][0] - (2 * diffe[1][1]) <= TOLERANCE1 &&
-           diffe[1][0] - (2 * diffe[1][1]) >= TOLERANCE2){
-            if(diffe[0][0] - diffe[1][0] <= TOLERANCE1 && diffe[0][0] - diffe[1][0] >= TOLERANCE2){
-                if(diffe[0][1] - diffe[1][1] <= TOLERANCE1 && diffe[0][1] - diffe[1][1] >= TOLERANCE2){
+        if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
+            if(abs(diffe[0][0] - diffe[1][0]) <= TOLERANCE){
+                if(abs(diffe[0][1] - diffe[1][1]) <= TOLERANCE){
                     return true;
                 }
             }
