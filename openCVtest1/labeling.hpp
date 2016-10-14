@@ -23,13 +23,16 @@ private:
                          int Level //輪郭のレベル（階層）
     );
     bool check_rectangle(CvSeq *Nplate_point);
+    //ナンバープレートの始点を取得
+    void get_start_point(int *point);
 public:
     IplImage *frame; //webカメラの画像格納用
     IplImage *gray_img;//グレースケール画像
     IplImage *bin_img;//2値化画像
     IplImage *resutl_img;//ラベリング結果
-    CvMat *Nplate_point;
+    cv::Mat Nplate_point;
     CvCapture *videoCapture;
+    cv::Rect Nplate_rect; //ナンバーの位置を格納
     
     Labeling();
     
@@ -42,6 +45,8 @@ public:
                       IplImage *src_img,
                       IplImage *dst_img
                       );
+    
+    void trimming(IplImage *src_img);
     
     
 

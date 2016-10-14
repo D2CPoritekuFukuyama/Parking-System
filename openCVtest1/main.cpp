@@ -37,7 +37,8 @@ int main (int argc, char **argv)
         {
             labeling.Binarization(labeling.gray_img, labeling.bin_img);
             labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);
-            cvShowImage("labelling", labeling.resutl_img);
+            imshow("trimming", labeling.Nplate_point);
+            //cvShowImage("labelling", labeling.resutl_img);
         }
         labeling.frame = cvQueryFrame(labeling.videoCapture);
     }

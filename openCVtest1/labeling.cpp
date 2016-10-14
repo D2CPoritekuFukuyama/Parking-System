@@ -22,6 +22,9 @@ Labeling::Labeling(){
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     resutl_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
 }
+void Labeling::get_start_point(int *point){
+
+}
 
 void Labeling::DrawNextContour(
                 IplImage *img,//ラベリング結果を描画するIplImage(8Bit3chカラー）
@@ -53,8 +56,10 @@ void Labeling::DrawNextContour(
         if(approx->total == 4 && check_rectangle(approx)) //頂点が4で面積が100以上なら描画
         {
             cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
-            if (Contour -> h_next != NULL)
+            if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
+                trimming(gray_img);
+            }
         }
     }
 }
@@ -82,6 +87,8 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
         if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
             if(abs(diffe[0][0] - diffe[1][0]) <= TOLERANCE){
                 if(abs(diffe[0][1] - diffe[1][1]) <= TOLERANCE){
+                    //Nplate_rect = *(cv::Rect*)cvGetSeqElem(Nplate_point, 0);
+                    Nplate_rect = cvBoundingRect(Nplate_point, 0);
                     return true;
                 }
             }
@@ -113,8 +120,15 @@ void Labeling::cv_Labelling(
         cvSet(dst_img, CV_RGB(0, 0, 0));
         DrawNextContour(dst_img, contours, 1);
     }
-    
+    resutl_img = dst_img;
+    cvShowImage("Labeling", resutl_img);
     cvReleaseMemStorage(&storage);
+}
+
+void Labeling::trimming(IplImage *src_img){
+    cv::Mat src_mat = src_img;
+    cv::Mat cut_img(src_mat, Nplate_rect);
+    Nplate_point = cut_img;
 }
 
 void Labeling::Binarization(
