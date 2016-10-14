@@ -23,8 +23,6 @@ private:
                          int Level //輪郭のレベル（階層）
     );
     bool check_rectangle(CvSeq *Nplate_point);
-    //ナンバープレートの始点を取得
-    void get_start_point(int *point);
 public:
     IplImage *frame; //webカメラの画像格納用
     IplImage *gray_img;//グレースケール画像

@@ -37,7 +37,11 @@ int main (int argc, char **argv)
         {
             labeling.Binarization(labeling.gray_img, labeling.bin_img);
             labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);
-            imshow("trimming", labeling.Nplate_point);
+            if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
+                labeling.trimming(labeling.gray_img);
+                imshow("trimming", labeling.Nplate_point);
+            }
+            labeling.Nplate_rect = Rect(0,0,0,0);
             //cvShowImage("labelling", labeling.resutl_img);
         }
         labeling.frame = cvQueryFrame(labeling.videoCapture);

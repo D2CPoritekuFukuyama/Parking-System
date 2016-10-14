@@ -21,9 +21,7 @@ Labeling::Labeling(){
     gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     resutl_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
-}
-void Labeling::get_start_point(int *point){
-
+    Nplate_rect = cv::Rect(0,0,0,0);
 }
 
 void Labeling::DrawNextContour(
@@ -46,27 +44,25 @@ void Labeling::DrawNextContour(
     for (; Contour != 0; Contour = Contour ->h_next) {
         //輪郭のポリゴン近似
         CvSeq *approx = cvApproxPoly(Contour, sizeof(CvContour), NULL, CV_POLY_APPROX_DP, 20); //25
-        /* cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
-         if (Contour -> h_next != NULL)
-         DrawNextContour(img, approx->h_next, Level);
-         */
+
         //面積
         //double Area = fabs(cvContourArea(Contour, CV_WHOLE_SEQ));
         
-        if(approx->total == 4 && check_rectangle(approx)) //頂点が4で面積が100以上なら描画
+        //頂点四つ且つcheck_rectangle
+        if(approx->total == 4 && check_rectangle(approx))
         {
             cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
             if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
-                trimming(gray_img);
+                //trimming(gray_img);
             }
         }
     }
 }
 
 bool Labeling::check_rectangle(CvSeq *Nplate_point){
-    int target[4][2];
-    int diffe[2][2];
+    int target[4][2];   //4つの座標格納
+    int diffe[2][2];    //それぞれの差分
     //四角形かどうか
 
         //4角形の座標をtargetに格納
@@ -87,7 +83,7 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
         if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
             if(abs(diffe[0][0] - diffe[1][0]) <= TOLERANCE){
                 if(abs(diffe[0][1] - diffe[1][1]) <= TOLERANCE){
-                    //Nplate_rect = *(cv::Rect*)cvGetSeqElem(Nplate_point, 0);
+                    //4点を包含する矩形を求める
                     Nplate_rect = cvBoundingRect(Nplate_point, 0);
                     return true;
                 }
@@ -98,6 +94,7 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
     
 }
 
+//ラベリング関数
 void Labeling::cv_Labelling(
                 IplImage *src_img,
                 IplImage *dst_img
@@ -125,21 +122,25 @@ void Labeling::cv_Labelling(
     cvReleaseMemStorage(&storage);
 }
 
+//トリミング関数
+//ラベリング時に取得したナンバープレートの点列を用いてトリミング
 void Labeling::trimming(IplImage *src_img){
     cv::Mat src_mat = src_img;
     cv::Mat cut_img(src_mat, Nplate_rect);
     Nplate_point = cut_img;
 }
 
+//2値化関数
 void Labeling::Binarization(
                   IplImage *src_img,
                   IplImage *dst_img
                   ){
     IplImage *bin_img1 = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
     IplImage *bin_img2 = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
-    cvThreshold(src_img, bin_img1, 165, 255, CV_THRESH_BINARY);
-    cvAdaptiveThreshold(src_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C,       CV_THRESH_BINARY);
-    cvAnd(bin_img1, bin_img2, dst_img);
+    cvThreshold(src_img, bin_img1, 165, 255, CV_THRESH_BINARY); //閾値165で2値化
+    //適応的閾値処理
+    cvAdaptiveThreshold(src_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
+    cvAnd(bin_img1, bin_img2, dst_img); //二つの２値化画像の論理積
     cvShowImage("bin1", bin_img1);
     cvShowImage("bin2", bin_img2);
     cvShowImage("result", dst_img);
