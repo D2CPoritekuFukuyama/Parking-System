@@ -41,6 +41,7 @@ int main (int argc, char **argv)
                 labeling.trimming(labeling.gray_img);
                 imshow("trimming", labeling.Nplate_point);
             }
+            
             labeling.Nplate_rect = Rect(0,0,0,0);
             //cvShowImage("labelling", labeling.resutl_img);
         }

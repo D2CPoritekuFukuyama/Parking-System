@@ -15,6 +15,7 @@
 
 #endif /* labeling_hpp */
 
+
 class Labeling{
 private:
     void DrawNextContour(
@@ -23,6 +24,7 @@ private:
                          int Level //輪郭のレベル（階層）
     );
     bool check_rectangle(CvSeq *Nplate_point);
+    void contrast_correct(cv::Mat img);
 public:
     IplImage *frame; //webカメラの画像格納用
     IplImage *gray_img;//グレースケール画像
@@ -45,6 +47,8 @@ public:
                       );
     
     void trimming(IplImage *src_img);
+    
+
     
     
 

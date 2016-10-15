@@ -13,6 +13,7 @@
 
 #define TOLERANCE 50
 
+using namespace cv;
 
 
 Labeling::Labeling(){
@@ -125,10 +126,28 @@ void Labeling::cv_Labelling(
 //トリミング関数
 //ラベリング時に取得したナンバープレートの点列を用いてトリミング
 void Labeling::trimming(IplImage *src_img){
-    cv::Mat src_mat = src_img;
-    cv::Mat cut_img(src_mat, Nplate_rect);
+    Mat src_mat = src_img;
+    
+    Mat cut_img(src_mat, Nplate_rect); //プレートのトリミング
     Nplate_point = cut_img;
-    cv::resize(Nplate_point, Nplate_point, cvSize(200, 100));  //200 x 100にリサイズ
+    resize(Nplate_point, Nplate_point, cvSize(300, 150));  //200 x 100にリサイズ
+    Mat Nplate1(Nplate_point, Rect(65, 0, 180, 60));
+    Mat Nplate2(Nplate_point, Rect(10,55,280,95));
+    contrast_correct(Nplate_point);
+    imshow("Nplate-up", Nplate1);
+    imshow("Nplate-down", Nplate2);
+    imwrite("image/Nplate.jpg", Nplate_point);
+    imwrite("image/Nplate-up.jpg", Nplate1);
+    imwrite("image/Npalte-down.jpg", Nplate2);
+}
+
+void Labeling::contrast_correct(Mat img){
+    // ルックアップテーブル作成
+    float a = 20.0; // 入力パラメータ
+    uchar lut[256];
+    for (int i = 0; i < 256; i++)
+        lut[i] = 255.0 / (1+exp(-a*(i-128)/255));
+    cv::LUT(img, cv::Mat(cvSize(256, 1), CV_8U, lut),img);
 }
 
 //2値化関数
@@ -142,7 +161,7 @@ void Labeling::Binarization(
     //適応的閾値処理
     cvAdaptiveThreshold(src_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
     cvAnd(bin_img1, bin_img2, dst_img); //二つの２値化画像の論理積
-    cvShowImage("bin1", bin_img1);
-    cvShowImage("bin2", bin_img2);
-    cvShowImage("result", dst_img);
+    //cvShowImage("bin1", bin_img1);
+    //cvShowImage("bin2", bin_img2);
+    //cvShowImage("result", dst_img);
 }
