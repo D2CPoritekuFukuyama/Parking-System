@@ -1,0 +1,8 @@
+*.DS_Store
+openCVtest1.xcodeproj/
+openCVtest1/Makefile
+openCVtest1/main
+image/ken.jpg
+image/nPlate?.jpg
+image/nPlate?_Fotor.jpg
+image/test.jpg
