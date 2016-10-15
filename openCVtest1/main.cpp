@@ -8,6 +8,7 @@
 #include "cv.h"
 #include "highgui.h"
 #include "labeling.hpp"
+#include "templateMatch.hpp"
 
 using namespace cv;
 
@@ -18,6 +19,7 @@ void Binarization(IplImage *src_img, IplImage *dst_img);
 int main (int argc, char **argv)
 {
     Labeling labeling; //ナンバープレート検出のクラス
+    TemplateMatch templateMatch = TemplateMatch();
     if( labeling.videoCapture == NULL )
     {
         return -1;
@@ -39,6 +41,7 @@ int main (int argc, char **argv)
             labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);
             if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
                 labeling.trimming(labeling.gray_img);
+                templateMatch.Matching();
                 imshow("trimming", labeling.Nplate_point);
             }
             

@@ -138,7 +138,7 @@ void Labeling::trimming(IplImage *src_img){
     imshow("Nplate-down", Nplate2);
     imwrite("image/Nplate.jpg", Nplate_point);
     imwrite("image/Nplate-up.jpg", Nplate1);
-    imwrite("image/Npalte-down.jpg", Nplate2);
+    imwrite("image/Nplate-down.jpg", Nplate2);
 }
 
 void Labeling::contrast_correct(Mat img){
