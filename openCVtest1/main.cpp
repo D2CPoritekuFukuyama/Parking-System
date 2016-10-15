@@ -4,7 +4,7 @@
 //
 //  Created by 石川諒 on 2016/10/01.
 //  Copyright © 2016年 石川諒. All rights reserved.
-
+#include "stdio.h"
 #include "cv.h"
 #include "highgui.h"
 #include "labeling.hpp"
@@ -42,10 +42,18 @@ int main (int argc, char **argv)
             if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
                 labeling.trimming(labeling.gray_img);
                 templateMatch.Matching();
+                for(int i=0; i < 4; i++)
+                    printf("%d", templateMatch.location[i][1]);
+                printf("\n");
                 imshow("trimming", labeling.Nplate_point);
             }
             
             labeling.Nplate_rect = Rect(0,0,0,0);
+            //locationのゼロクリア
+            for (int i = 0; i < 4; i++){
+                templateMatch.location[i][0] = 0;
+                templateMatch.location[i][1] = 0;
+            }
             //cvShowImage("labelling", labeling.resutl_img);
         }
         labeling.frame = cvQueryFrame(labeling.videoCapture);

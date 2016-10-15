@@ -17,6 +17,9 @@
 #endif /* templateMatch_hpp */
 
 class TemplateMatch{
+private:
+    void location_sort();
 public:
     void Matching();
+    int location[4][2]; //ナンバーのx座標と数字を格納
 };

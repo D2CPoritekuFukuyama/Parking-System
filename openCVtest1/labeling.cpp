@@ -131,8 +131,8 @@ void Labeling::trimming(IplImage *src_img){
     Mat cut_img(src_mat, Nplate_rect); //プレートのトリミング
     Nplate_point = cut_img;
     resize(Nplate_point, Nplate_point, cvSize(300, 150));  //200 x 100にリサイズ
-    Mat Nplate1(Nplate_point, Rect(65, 0, 180, 60));
-    Mat Nplate2(Nplate_point, Rect(10,55,280,95));
+    Mat Nplate1(Nplate_point, Rect(65, 0, 180, 55));
+    Mat Nplate2(Nplate_point, Rect(15,50,280,100));
     contrast_correct(Nplate_point);
     imshow("Nplate-up", Nplate1);
     imshow("Nplate-down", Nplate2);
