@@ -128,6 +128,7 @@ void Labeling::trimming(IplImage *src_img){
     cv::Mat src_mat = src_img;
     cv::Mat cut_img(src_mat, Nplate_rect);
     Nplate_point = cut_img;
+    cv::resize(Nplate_point, Nplate_point, cvSize(200, 100));  //200 x 100にリサイズ
 }
 
 //2値化関数
