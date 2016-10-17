@@ -133,6 +133,7 @@ void Labeling::trimming(IplImage *src_img){
     resize(Nplate_point, Nplate_point, cvSize(300, 150));  //200 x 100にリサイズ
     Mat Nplate1(Nplate_point, Rect(65, 0, 180, 55));
     Mat Nplate2(Nplate_point, Rect(10,50,285,100));
+
     contrast_correct(Nplate_point);
     imshow("Nplate-up", Nplate1);
     imshow("Nplate-down", Nplate2);

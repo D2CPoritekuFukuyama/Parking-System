@@ -10,8 +10,10 @@
 #define NUMBER 10
 #define HIRAGANA_NUMBER 31
 
+
 using namespace cv;
 using namespace std;
+
 
 //マッチングした順に格納された数字をx座標をもとに並べ替え
 void TemplateMatch::location_sort(){
@@ -32,6 +34,7 @@ void TemplateMatch::location_sort(){
 
     }
 }
+
 int TemplateMatch::Number_Matching(IplImage *src_img){
     CvPoint max_loc; //マッチした場所を格納
     double max_val; //マッチング率
@@ -117,6 +120,5 @@ void TemplateMatch::Matching(){
     cvThreshold(src_img2, src_img2, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU); //2値化
     hiragana = Hiragana_Matching(src_img2);
     printf("%c %d\n", hiragana, Number_Matching(src_img1));
-    
 
 }
