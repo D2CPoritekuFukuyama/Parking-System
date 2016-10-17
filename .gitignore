@@ -7,3 +7,4 @@ image/Nplate*
 image/test.jpg
 image/Number.jpg
 openCVtest1/image
+openCVtest1/*.o
