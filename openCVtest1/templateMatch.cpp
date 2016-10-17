@@ -98,7 +98,7 @@ char TemplateMatch::Hiragana_Matching(IplImage *src_img){
         cvMatchTemplate(src_img, templateImage, differenceMapImage, CV_TM_CCOEFF_NORMED);
         //一番マッチした場所と値の格納
         cvMinMaxLoc(differenceMapImage, NULL, &max_val, NULL, &max_loc, NULL);
-        if(max_val >= 0.5)
+        if(max_val >= 0.6)
         {
             cvRectangle(src_img, max_loc, cvPoint(max_loc.x + templateImage->width, max_loc.y +templateImage  -> height),CV_RGB(255, 0, 0),-1,8,0);
             cvSaveImage("image/test.jpg", src_img);
