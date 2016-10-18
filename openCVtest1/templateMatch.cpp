@@ -101,8 +101,7 @@ char TemplateMatch::Hiragana_Matching(IplImage *src_img){
         if(max_val >= 0.6)
         {
             cvRectangle(src_img, max_loc, cvPoint(max_loc.x + templateImage->width, max_loc.y +templateImage  -> height),CV_RGB(255, 0, 0),-1,8,0);
-            cvSaveImage("image/test.jpg", src_img);
-            
+            cvSaveImage("image/test.jpg", src_img);		
             result = template_name[i];
             return result;
             
