@@ -18,8 +18,8 @@ using namespace cv;
 
 Labeling::Labeling(){
     videoCapture = cvCreateCameraCapture( 0 );
-    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_WIDTH, 960);
-    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_HEIGHT, 720);
+    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_WIDTH, 1280);
+    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_HEIGHT, 960);
     frame = cvQueryFrame(videoCapture);
     gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
@@ -121,7 +121,7 @@ void Labeling::cv_Labelling(
         DrawNextContour(dst_img, contours, 1);
     }
     resutl_img = dst_img;
-    cvShowImage("Labeling", resutl_img);
+    //cvShowImage("Labeling", resutl_img);
     cvReleaseMemStorage(&storage);
 }
 
@@ -162,7 +162,7 @@ void Labeling::Binarization(
                   ){
     IplImage *bin_img1 = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
     IplImage *bin_img2 = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
-    cvThreshold(src_img, bin_img1, 165, 255, CV_THRESH_BINARY); //閾値165で2値化
+    cvThreshold(src_img, bin_img1, 170, 255, CV_THRESH_BINARY); //閾値165で2値化
     //適応的閾値処理
     cvAdaptiveThreshold(src_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
     cvAnd(bin_img1, bin_img2, dst_img); //二つの２値化画像の論理積
