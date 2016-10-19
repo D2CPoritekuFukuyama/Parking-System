@@ -18,6 +18,8 @@ using namespace cv;
 
 Labeling::Labeling(){
     videoCapture = cvCreateCameraCapture( 0 );
+    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_WIDTH, 960);
+    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_HEIGHT, 720);
     frame = cvQueryFrame(videoCapture);
     gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
