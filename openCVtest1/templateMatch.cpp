@@ -78,7 +78,7 @@ int TemplateMatch::Number_Matching(IplImage *src_img){
 char TemplateMatch::Hiragana_Matching(IplImage *src_img){
     CvPoint max_loc; //マッチした場所を格納
     double max_val; //マッチング率
-    string template_name ="aiueokakikukekosasisusesotatitutetonaninunenohahihuhehomamimumemoyayuyorarirurero";
+    string template_name ="atowa"; //ひらがな
     char result;
     IplImage *templateImage; //テンプレート画像
     IplImage *differenceMapImage; //探索結果
@@ -107,6 +107,7 @@ char TemplateMatch::Hiragana_Matching(IplImage *src_img){
             return result;
             
         }
+        ss.str("");
     }
     return NULL;
     
