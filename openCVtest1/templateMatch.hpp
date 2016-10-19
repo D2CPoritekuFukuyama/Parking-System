@@ -21,6 +21,6 @@ private:
     int Number_Matching(IplImage *src_img);
     char Hiragana_Matching(IplImage *src_img);
 public:
-    void Matching();
+    std::string Matching();
     int location[4][2]; //ナンバーのx座標と数字を格納
 };

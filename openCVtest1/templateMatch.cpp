@@ -113,13 +113,16 @@ char TemplateMatch::Hiragana_Matching(IplImage *src_img){
     
 }
 
-void TemplateMatch::Matching(){
+string TemplateMatch::Matching(){
     IplImage *src_img1 = cvLoadImage("image/Nplate-down.jpg", CV_LOAD_IMAGE_GRAYSCALE); //探索対象画像
     IplImage *src_img2 = src_img1;
     char hiragana;
+    stringstream ss;
     cvThreshold(src_img1, src_img1, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU); //2値化
     cvThreshold(src_img2, src_img2, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU); //2値化
     hiragana = Hiragana_Matching(src_img2);
-    printf("%c %d\n", hiragana, Number_Matching(src_img1));
+    //printf("%c %d\n", hiragana, Number_Matching(src_img1));
+    ss << hiragana << " " <<Number_Matching(src_img1);
+    return ss.str();
 
 }
