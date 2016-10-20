@@ -1,7 +1,7 @@
 require "open3"
-require "./ocr_client.rb"
+require "./ocr_Client_module.rb"
 require "json"
-include OCR_Recognize
+include OCR_Recognize 
 
 
 def parse_json(json_data)
