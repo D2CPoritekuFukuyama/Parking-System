@@ -20,7 +20,7 @@ void TemplateMatch::location_sort(){
     int tmp1,tmp2;
     for(int i = 0; i < 3; i++)
     {
-        for (int j = 0; j < 4; j ++) {
+        for (int j = 0; j < 3; j ++) {
             if(location[j][0] > location[j + 1][0])
             {
                 tmp1 = location[j][0];
