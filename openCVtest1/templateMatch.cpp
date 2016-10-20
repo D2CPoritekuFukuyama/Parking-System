@@ -8,7 +8,7 @@
 
 #include "templateMatch.hpp"
 #define NUMBER 10
-#define HIRAGANA_NUMBER 31
+#define HIRAGANA_NUMBER 3
 
 
 using namespace cv;
@@ -75,11 +75,11 @@ int TemplateMatch::Number_Matching(IplImage *src_img){
     return result;
 }
 
-char TemplateMatch::Hiragana_Matching(IplImage *src_img){
+string TemplateMatch::Hiragana_Matching(IplImage *src_img){
     CvPoint max_loc; //マッチした場所を格納
     double max_val; //マッチング率
     string template_name ="atowa"; //ひらがな
-    char result;
+    string result;
     IplImage *templateImage; //テンプレート画像
     IplImage *differenceMapImage; //探索結果
     String filename;
@@ -102,21 +102,26 @@ char TemplateMatch::Hiragana_Matching(IplImage *src_img){
         {
             cvRectangle(src_img, max_loc, cvPoint(max_loc.x + templateImage->width, max_loc.y +templateImage  -> height),CV_RGB(255, 0, 0),-1,8,0);
             cvSaveImage("image/test.jpg", src_img);
-            
-            result = template_name[i];
+            if (i != 0){
+                ss.str("");
+                ss << template_name[i] << template_name[i+1];
+                result = ss.str();
+                i++;}
+            else
+                result = template_name[i];
             return result;
             
         }
         ss.str("");
     }
-    return NULL;
+    return " ";
     
 }
 
 string TemplateMatch::Matching(){
     IplImage *src_img1 = cvLoadImage("image/Nplate-down.jpg", CV_LOAD_IMAGE_GRAYSCALE); //探索対象画像
     IplImage *src_img2 = src_img1;
-    char hiragana;
+    string hiragana;
     stringstream ss;
     cvThreshold(src_img1, src_img1, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU); //2値化
     cvThreshold(src_img2, src_img2, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU); //2値化

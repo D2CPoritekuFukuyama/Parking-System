@@ -19,7 +19,7 @@ class TemplateMatch{
 private:
     void location_sort();
     int Number_Matching(IplImage *src_img);
-    char Hiragana_Matching(IplImage *src_img);
+    std::string Hiragana_Matching(IplImage *src_img);
 public:
     std::string Matching();
     int location[4][2]; //ナンバーのx座標と数字を格納

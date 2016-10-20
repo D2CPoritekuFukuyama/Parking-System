@@ -38,7 +38,7 @@ int main (int argc, char **argv)
             if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
                 labeling.trimming(labeling.gray_img);
                 result = templateMatch.Matching();
-                if (result[0] != '\0') {
+                if (result[0] != ' ') {
                     printf("%s\n", result.c_str());
                     cvReleaseCapture(&labeling.videoCapture);
                     cvDestroyAllWindows();
