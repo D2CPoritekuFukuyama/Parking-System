@@ -48,10 +48,7 @@ int main (int argc, char **argv)
             
             labeling.Nplate_rect = Rect(0,0,0,0);
             //locationのゼロクリア
-            for (int i = 0; i < 4; i++){
-                templateMatch.location[i][0] = 0;
-                templateMatch.location[i][1] = 0;
-            }
+
             //cvShowImage("labelling", labeling.resutl_img);
         
         labeling.frame = cvQueryFrame(labeling.videoCapture);
