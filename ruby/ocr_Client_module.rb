@@ -3,7 +3,7 @@ module OCR_Recognize
 #require 'net/http'
     def get_AreaName()
         uri = URI('https://api.projectoxford.ai/vision/v1.0/ocr')
-        image = File.open('image/Nplate-up.jpg')
+        image = File.open('image/Nplate-up1.jpg')
         uri.query = URI.encode_www_form({
             # Request parameters
             'language' => 'ja',
@@ -25,4 +25,32 @@ module OCR_Recognize
         response.body
     end
     module_function :get_AreaName
+    
+    def parse_json(json_data)
+        begin
+            json =  JSON.parse(json_data) 
+            regions = json["regions"]
+            region = regions[0]
+            lines = region["lines"]    
+            line = lines[0]
+            words = line["words"]
+        rescue
+            return nil
+        end
+        text = ""
+        words.each do |word|
+            text << word["text"]
+        end 
+        result = ""
+        text.chars do |str|
+            #if(str =~ /[^ -~｡-ﾟ]/)
+            if(str =~ /\p{hiragana}|[ー-龠]/)
+                result << str 
+            end 
+        end 
+        #puts result 
+        #puts stdArray[0]
+        return result
+    end
+    module_function :parse_json
 end

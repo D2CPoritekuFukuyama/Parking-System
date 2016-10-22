@@ -139,7 +139,7 @@ int TemplateMatch::CategoryNum_Matching(IplImage *src_img){
         cvMatchTemplate(src_img, templateImage, differenceMapImage, CV_TM_CCOEFF_NORMED);
         //一番マッチした場所と値の格納
         cvMinMaxLoc(differenceMapImage, NULL, &max_val, NULL, &max_loc, NULL);
-        if(max_val >= 0.58)
+        if(max_val >= 0.7)
         {
             //マッチした場所を塗りつぶす
             cvRectangle(src_img, max_loc, cvPoint(max_loc.x + templateImage->width, max_loc.y +templateImage  -> height),CV_RGB(255, 0, 0),-1,8,0);
@@ -155,7 +155,7 @@ int TemplateMatch::CategoryNum_Matching(IplImage *src_img){
     location_sort(); //各数字の位置を昇順に並べ替え
     ss << location[0][1] << location[1][1] << location[2][1] << location[3][1];
     ss >> result;
-    result /= 10; //4桁目はないため除算で消す
+    //result /= 10; //4桁目はないため除算で消す
     return result;
 }
 
@@ -172,7 +172,12 @@ string TemplateMatch::Matching(){
     hiragana = Hiragana_Matching(src_img2);
     //printf("%c %d\n", hiragana, Number_Matching(src_img1));
     //printf("%d", CategoryNum_Matching(category_img));
-    ss << hiragana << " " <<Number_Matching(src_img1) << " " << CategoryNum_Matching(category_img);
+    ss << hiragana << " " <<Number_Matching(src_img1) << " ";
+    for (int i = 0; i < 4; i++) {
+        location[i][0] = 0;
+        location[i][1] = 0;
+    }
+    ss << CategoryNum_Matching(category_img);
     return ss.str();
 
 }
