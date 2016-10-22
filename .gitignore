@@ -4,7 +4,7 @@ openCVtest1/Makefile
 openCVtest1/main
 **/ken.jpg
 **/Nplate*
-**/test.jpg
+**/test*.jpg
 **/Number.jpg
 openCVtest1/image
 openCVtest1/*.o
