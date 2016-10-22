@@ -19,7 +19,7 @@ void Binarization(IplImage *src_img, IplImage *dst_img);
 int main (int argc, char **argv)
 {
     string result;
-    Labeling labeling; //ナンバープレート検出のクラス
+    Labeling labeling = Labeling(); //ナンバープレート検出のクラス
     TemplateMatch templateMatch = TemplateMatch();
     if( labeling.videoCapture == NULL )
     {
