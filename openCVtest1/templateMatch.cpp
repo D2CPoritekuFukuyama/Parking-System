@@ -132,7 +132,6 @@ int TemplateMatch::CategoryNum_Matching(IplImage *src_img){
     for(int i = 0; i < NUMBER; i ++){
         ss << "image/Category_Number/" << i << ".jpg";
         filename = ss.str();
-		printf("%s\n", filename.c_str());
         
         templateImage  = cvLoadImage(filename.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
         differenceMapImage = cvCreateImage(cvSize(src_img -> width - templateImage -> width + 1, src_img -> height - templateImage -> height + 1), IPL_DEPTH_32F, 1);
