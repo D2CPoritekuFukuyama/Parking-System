@@ -139,7 +139,6 @@ int TemplateMatch::CategoryNum_Matching(IplImage *src_img){
         cvMatchTemplate(src_img, templateImage, differenceMapImage, CV_TM_CCOEFF_NORMED);
         //一番マッチした場所と値の格納
         cvMinMaxLoc(differenceMapImage, NULL, &max_val, NULL, &max_loc, NULL);
-		printf("cateNum_Matching now\n");
         if(max_val >= 0.7)
         {
             //マッチした場所を塗りつぶす
