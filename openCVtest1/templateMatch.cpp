@@ -49,7 +49,7 @@ int TemplateMatch::Number_Matching(IplImage *src_img){
     for(int i = 0; i < NUMBER; i ++){
         ss << "image/Number/" << i << ".jpg";
         filename = ss.str();
-        
+       
         templateImage  = cvLoadImage(filename.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
         differenceMapImage = cvCreateImage(cvSize(src_img -> width - templateImage -> width + 1, src_img -> height - templateImage -> height + 1), IPL_DEPTH_32F, 1);
         //テンプレートマッチング
@@ -130,7 +130,7 @@ int TemplateMatch::CategoryNum_Matching(IplImage *src_img){
     cvThreshold(src_img, src_img, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU); //2値化
     //数字のマッチング
     for(int i = 0; i < NUMBER; i ++){
-        ss << "image/category_Number/" << i << ".jpg";
+        ss << "image/Category_Number/" << i << ".jpg";
         filename = ss.str();
         
         templateImage  = cvLoadImage(filename.c_str(), CV_LOAD_IMAGE_GRAYSCALE);

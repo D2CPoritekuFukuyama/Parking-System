@@ -6,9 +6,11 @@ class Member_DAO < Azure_DAO
         sql = "SELECT 会員ID,PLATENo1, PLATENo2, Area, hiragana 
                 FROM 会員 
                 WHERE PLATENo1 = '#{cate_num.to_i}'
-                AND PLATENo2 = '#{number}'
-                AND Area = (N'#{area}');"
+                AND PLATENo2 = '#{number.to_i}'
+                AND Area = (N'#{area.sub(/\s/,"")}');"
+
 #                AND hiragana = 'hiragana';" 
+		puts sql
         results = @client.execute(sql)
 #        results.each do |row|
 #            puts row

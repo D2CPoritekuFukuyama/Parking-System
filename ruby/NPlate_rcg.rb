@@ -8,7 +8,7 @@ memberDAO = Member_DAO.new
 #memberDAO.get_member
 while(true)
     begin
-        stdin, stdout, stderr = Open3.capture3('../openCVTest1/main')
+        stdin, stdout, stderr = Open3.capture3('../openCVtest1/main')
     rescue => ex
         p stderr
         p ex
