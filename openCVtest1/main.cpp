@@ -18,7 +18,8 @@ void Binarization(IplImage *src_img, IplImage *dst_img);
 
 int main (int argc, char **argv)
 {
-    Labeling labeling; //ナンバープレート検出のクラス
+    string result;
+    Labeling labeling = Labeling(); //ナンバープレート検出のクラス
     TemplateMatch templateMatch = TemplateMatch();
     if( labeling.videoCapture == NULL )
     {
@@ -31,28 +32,25 @@ int main (int argc, char **argv)
     while (1) {
         cvCvtColor(labeling.frame, labeling.gray_img, CV_RGB2GRAY);
         cvShowImage("webCamera", labeling.frame);
-        int key = waitKey(1);
-        if(key == 113)//qボタンが押されたとき
-        {
-            break;//whileループから抜ける．
-        }else if(key == 115)
-        {
+
             labeling.Binarization(labeling.gray_img, labeling.bin_img);
             labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);
             if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
                 labeling.trimming(labeling.gray_img);
-                templateMatch.Matching();
-                imshow("trimming", labeling.Nplate_point);
+                result = templateMatch.Matching();
+                if (result[0] != ' ') {
+                    printf("%s\n", result.c_str());
+                    cvReleaseCapture(&labeling.videoCapture);
+                    cvDestroyAllWindows();
+                    break;
+                }
             }
             
             labeling.Nplate_rect = Rect(0,0,0,0);
             //locationのゼロクリア
-            for (int i = 0; i < 4; i++){
-                templateMatch.location[i][0] = 0;
-                templateMatch.location[i][1] = 0;
-            }
+
             //cvShowImage("labelling", labeling.resutl_img);
-        }
+        
         labeling.frame = cvQueryFrame(labeling.videoCapture);
     }
     cvReleaseCapture(&labeling.videoCapture);
