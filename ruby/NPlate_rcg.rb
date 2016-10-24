@@ -4,28 +4,53 @@ require "json"
 require "./DAO/azure_MemberDAO.rb"
 include OCR_Recognize 
 
-memberDAO = Member_DAO.new 
-#memberDAO.get_member
-while(true)
-    begin
-        stdin, stdout, stderr = Open3.capture3('../openCVtest1/main')
-    rescue => ex
-        p stderr
-        p ex
+class Nplate_RCG
+    attr_reader :nPlate
+    attr_reader :area
+    attr_reader :is_member
+    
+    def initialize()
+        @memberDAO = Member_DAO.new 
     end
-    stdArray = stdin.split("\n")
-    nPlate = stdArray[0].split(" ")
-    area = OCR_Recognize.parse_json(OCR_Recognize.get_AreaName())
-    File.foreach('Area.text') do |a|
-        if area =~ /[*#{area}*]/
-            area = a
-            break
+
+    def fetch_car_number
+        begin
+            stdin, stdout, stderr = Open3.capture3('../openCVtest1/main')
+        rescue => ex
+            p stderr
+            p ex
+        end
+        stdArray = stdin.split("\n")
+        @nPlate = stdArray[0].split(" ")
+    end
+    private :fetch_car_number
+
+    def fetch_area_name
+        @area = OCR_Recognize.parse_json(OCR_Recognize.get_AreaName())
+        #puts @area
+        File.foreach('Area.text') do |a|
+            if a =~ /[*#{area}*]/
+                @area = a
+                return @area
+            end
+        end
+        @area ="" 
+    end 
+    private :fetch_area_name
+
+    def get_NumberPlate
+        fetch_car_number
+        fetch_area_name
+        if (nPlate[2] != 0 && area != nil)
+            #puts nPlate
+            #puts area
+            result = @memberDAO.get_member(nPlate[1], nPlate[2], nPlate[0], area)
+            if result.count == 1 
+                @is_member = 1
+            else
+                @is_member = 0
+            end
         end
     end
-    if (nPlate[2] != 0 && area != nil)
-        puts nPlate
-        puts area
-        memberDAO.get_member(nPlate[1], nPlate[2], nPlate[0], area)
-        break 
-    end
+    public :get_NumberPlate
 end
