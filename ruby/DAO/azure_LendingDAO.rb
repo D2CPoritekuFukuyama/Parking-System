@@ -1,9 +1,16 @@
 require 'tiny_tds'  
 require './DAO/azure_baseDAO.rb'
+require 'date'
 
 class Lending_DAO < Azure_DAO 
-    def record_adm(id, adm_time)
-        puts adm_time.to_s
+	def initialize
+		super
+		now_time = DateTime.now
+		@str_admDate = now_time.strftime("%Y-%m-%d %H-%M-00")
+		
+	end
+
+    def record_adm(id)
         sql = "INSERT INTO 貸出(
                 会員ID,
                 入庫時間,
@@ -12,12 +19,20 @@ class Lending_DAO < Azure_DAO
             )
             VALUES(
                 #{id},
-                '#{adm_time}',
-                '#{adm_time}',
+                '#{@str_admDate}',
+                '#{@str_admDate}',
                 0
             )"
-        results = @client.execute(sql).do
+        results = @client.execute(sql)
     end
+
+	def record_member_leaving(id)
+       sql = "UPDATE 貸出
+	   		 SET 出庫時間 = #{@str_admDate},
+	   		 WHERE 会員ID = #{id}
+			 AND 入庫時間 = 出庫時間"
+       results = @client.execute(sql)end
+
 end
 
 #test = Member_DAO.new

@@ -121,7 +121,7 @@ void Labeling::cv_Labelling(
         DrawNextContour(dst_img, contours, 1);
     }
     resutl_img = dst_img;
-    cvShowImage("Labeling", resutl_img);
+    //cvShowImage("Labeling", resutl_img);
     cvReleaseMemStorage(&storage);
 }
 

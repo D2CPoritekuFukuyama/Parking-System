@@ -26,12 +26,12 @@ int main (int argc, char **argv)
         return -1;
     }
     //webカメラ用window生成
-    cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
+    //cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
 
     
     while (1) {
         cvCvtColor(labeling.frame, labeling.gray_img, CV_RGB2GRAY);
-        cvShowImage("webCamera", labeling.frame);
+        //cvShowImage("webCamera", labeling.frame);
 
             labeling.Binarization(labeling.gray_img, labeling.bin_img);
             labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);

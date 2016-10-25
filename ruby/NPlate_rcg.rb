@@ -8,6 +8,7 @@ class Nplate_RCG
     attr_reader :nPlate
     attr_reader :area
     attr_reader :is_member
+	attr_reader :member_ID
     
     def initialize()
         @memberDAO = Member_DAO.new 
@@ -27,7 +28,7 @@ class Nplate_RCG
 
     def fetch_area_name
         @area = OCR_Recognize.parse_json(OCR_Recognize.get_AreaName())
-        #puts @area
+        puts @area
         File.foreach('Area.text') do |a|
             if a =~ /[*#{area}*]/
                 @area = a
@@ -47,6 +48,9 @@ class Nplate_RCG
             result = @memberDAO.get_member(nPlate[1], nPlate[2], nPlate[0], area)
             if result.count == 1 
                 @is_member = 1
+				result.each do |row|
+					@member_ID = row[0]
+				end
             else
                 @is_member = 0
             end

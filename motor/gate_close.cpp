@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <wiringPi.h>
 #include <unistd.h>
 #define HOLE 17	
@@ -12,16 +13,15 @@ void *thread_func(void *arg)
 	pwmSetRange(1024);
 	pwmWrite(18,27 );
 	int i = 0, m = 0;
-//	if (wiringPiSetupGpio() == -1) return 1;
 	while (1){
-		m = digitalRead(HOLE);
-		i = digitalRead(HOLE2);
-		if (m == 0){
-			pwmWrite(18, 73);
-		}
-		if (i == 0){
-			pwmWrite(18,27);
-		}
+	m = digitalRead(HOLE);
+	i = digitalRead(HOLE2);
+	//if (m == 0){
+  	//pwmWrite(18, 73);
+	//}
+	//if (i == 0){
+		pwmWrite(18,27);
+	//}
 	}
 }
 
@@ -33,9 +33,9 @@ int main()
 	//GPIOèâä˙âª
 	if (wiringPiSetupGpio() == -1) return 1;
 	else stat = pthread_create(&th, NULL, thread_func, (void *)(buf));
-	while (1){
-		sleep(0xFFFFFFFF);
-	}
+	//for(int i = 0; i < 10; i++){
+		sleep(1);
+	//}
 	return 0;
 }
 
