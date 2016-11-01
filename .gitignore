@@ -1,10 +1,10 @@
 **/.DS_Store
 openCVtest1.xcodeproj/
-**/Makefile
-**/main
+openCVtest1/Makefile
+openCVtest1/main
 **/ken.jpg
 **/Nplate*.jpg
 **/*test*
 **/Number.jpg
-Nplate_rcg/image
-**/*.o
+openCVtest1/image
+openCVtest1/*.o
