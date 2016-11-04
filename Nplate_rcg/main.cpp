@@ -8,7 +8,8 @@
 #include "cv.h"
 #include "highgui.h"
 #include "labeling.hpp"
-#include "templateMatch.hpp"
+#include "NplateMatch.hpp"
+
 
 using namespace cv;
 
@@ -20,24 +21,28 @@ int main (int argc, char **argv)
 {
     string result;
     Labeling labeling = Labeling(); //ナンバープレート検出のクラス
-    TemplateMatch templateMatch = TemplateMatch();
+    NplateMatch nplateMatch = NplateMatch();
     if( labeling.videoCapture == NULL )
     {
         return -1;
     }
     //webカメラ用window生成
+#ifdef DEBUG
     cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
+#endif
 
     
     while (1) {
         cvCvtColor(labeling.frame, labeling.gray_img, CV_RGB2GRAY);
+#ifdef DEBUG
         cvShowImage("webCamera", labeling.frame);
+#endif
 
             labeling.Binarization(labeling.gray_img, labeling.bin_img);
             labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);
             if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
                 labeling.trimming(labeling.gray_img);
-                result = templateMatch.Matching();
+                result = nplateMatch.Matching();
                 if (result[0] != ' ') {
                     printf("%s\n", result.c_str());
                     cvReleaseCapture(&labeling.videoCapture);
@@ -48,8 +53,9 @@ int main (int argc, char **argv)
             
             labeling.Nplate_rect = Rect(0,0,0,0);
             //locationのゼロクリア
-
-            //cvShowImage("labelling", labeling.resutl_img);
+#ifdef DEBUG
+            cvShowImage("labelling", labeling.resutl_img);
+#endif
         
         labeling.frame = cvQueryFrame(labeling.videoCapture);
     }

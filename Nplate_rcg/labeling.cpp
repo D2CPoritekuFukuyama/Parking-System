@@ -11,6 +11,7 @@
 #include "highgui.h"
 #include "cxcore.h"
 
+
 #define TOLERANCE 50
 
 using namespace cv;
@@ -121,8 +122,10 @@ void Labeling::cv_Labelling(
         DrawNextContour(dst_img, contours, 1);
     }
     resutl_img = dst_img;
-    cvShowImage("Labeling", resutl_img);
-    cvReleaseMemStorage(&storage);
+    #ifdef DEBUG
+        cvShowImage("Labeling", resutl_img);
+    #endif
+        cvReleaseMemStorage(&storage);
 }
 
 //トリミング関数

@@ -15,9 +15,12 @@
 #include "cv.h"
 #include "highgui.h"
 
+using namespace std;
+
 class Matching{
-private:
-    void binarization();
+protected:
+    string get_num();
+    map<int, int> num_map;
 public:
     Matching(IplImage *src_img);
     IplImage *target_img;

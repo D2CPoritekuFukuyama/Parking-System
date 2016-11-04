@@ -10,7 +10,6 @@ class Member_DAO < Azure_DAO
                 AND Area = (N'#{area.sub(/\s/,"")}');"
 
 #                AND hiragana = 'hiragana';" 
-		puts sql
         results = @client.execute(sql)
 #        results.each do |row|
 #            puts row
