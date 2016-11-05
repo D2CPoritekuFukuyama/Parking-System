@@ -10,12 +10,9 @@
 #include "labeling.hpp"
 #include "NplateMatch.hpp"
 
-
+//#define VISUAL
+//#define DEBUG_LABELING
 using namespace cv;
-
-void cv_Labelling(IplImage *src_img, IplImage *dst_img);
-void GetContourFeature(CvSeq *Contour);
-void Binarization(IplImage *src_img, IplImage *dst_img);
 
 int main (int argc, char **argv)
 {
@@ -27,19 +24,25 @@ int main (int argc, char **argv)
         return -1;
     }
     //webカメラ用window生成
-#ifdef DEBUG
+#ifdef VISUAL
     cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
 #endif
 
     
     while (1) {
         cvCvtColor(labeling.frame, labeling.gray_img, CV_RGB2GRAY);
-#ifdef DEBUG
+#ifdef VISUAL
         cvShowImage("webCamera", labeling.frame);
 #endif
 
             labeling.Binarization(labeling.gray_img, labeling.bin_img);
             labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);
+#ifdef DEBUG_LABELING
+        if (cvWaitKey(1) == 0x71) {
+            break;
+        }
+#endif
+#if !defined DEBUG_LABELING
             if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
                 labeling.trimming(labeling.gray_img);
                 result = nplateMatch.Matching();
@@ -53,12 +56,11 @@ int main (int argc, char **argv)
             
             labeling.Nplate_rect = Rect(0,0,0,0);
             //locationのゼロクリア
-#ifdef DEBUG
-            cvShowImage("labelling", labeling.resutl_img);
 #endif
         
         labeling.frame = cvQueryFrame(labeling.videoCapture);
     }
+
     cvReleaseCapture(&labeling.videoCapture);
     cvDestroyAllWindows();
     return 0;

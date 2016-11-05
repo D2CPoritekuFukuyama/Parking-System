@@ -29,9 +29,6 @@ string NplateMatch::Matching(){
     cate_num = cateNumMathing.CategoryNum_Matching();//分類番号の取得
     hiragana = hiraganaMatching.Hiragana_Matching();
     
-    
-    
-
     ss << hiragana << " " << number << " " << cate_num;
     
     return ss.str();

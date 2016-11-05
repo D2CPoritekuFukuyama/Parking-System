@@ -11,11 +11,10 @@
 #include "highgui.h"
 #include "cxcore.h"
 
-
-#define TOLERANCE 50
+//#define VISUAL
+#define TOLERANCE 60
 
 using namespace cv;
-
 
 Labeling::Labeling(){
     videoCapture = cvCreateCameraCapture( 0 );
@@ -26,6 +25,7 @@ Labeling::Labeling(){
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     resutl_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
     Nplate_rect = cv::Rect(0,0,0,0);
+    Area = 0;
 }
 
 void Labeling::DrawNextContour(
@@ -48,13 +48,11 @@ void Labeling::DrawNextContour(
     for (; Contour != 0; Contour = Contour ->h_next) {
         //輪郭のポリゴン近似
         CvSeq *approx = cvApproxPoly(Contour, sizeof(CvContour), NULL, CV_POLY_APPROX_DP, 20); //25
-
-        //面積
-        //double Area = fabs(cvContourArea(Contour, CV_WHOLE_SEQ));
         
         //頂点四つ且つcheck_rectangle
         if(approx->total == 4 && check_rectangle(approx))
         {
+        
             cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
             if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
@@ -75,6 +73,7 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
         target[i][0] = p -> x;
         target[i][1] = p -> y;
     }
+
     //対角線上の頂点座標の差の絶対値をとってdiffeに格納
     for (int i = 0; i < 2; i++) {
         diffe[i][0] = abs(target[i+2][0] - target[i][0]);
@@ -88,7 +87,12 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
             if(abs(diffe[0][0] - diffe[1][0]) <= TOLERANCE){
                 if(abs(diffe[0][1] - diffe[1][1]) <= TOLERANCE){
                     //4点を包含する矩形を求める
-                    Nplate_rect = cvBoundingRect(Nplate_point, 0);
+                    //面積
+                    //一番大きい面積の長方形をナンバープレートの座標として保存
+                    if (Area <= fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ))){
+                        Area = fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ));
+                        Nplate_rect = cvBoundingRect(Nplate_point, 0);
+                    }
                     return true;
                 }
             }
@@ -122,9 +126,10 @@ void Labeling::cv_Labelling(
         DrawNextContour(dst_img, contours, 1);
     }
     resutl_img = dst_img;
-    #ifdef DEBUG
+    #ifdef VISUAL
         cvShowImage("Labeling", resutl_img);
     #endif
+    Area = 0;
         cvReleaseMemStorage(&storage);
 }
 

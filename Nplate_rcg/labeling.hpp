@@ -33,6 +33,7 @@ public:
     cv::Mat Nplate_point;
     CvCapture *videoCapture;
     cv::Rect Nplate_rect; //ナンバーの位置を格納
+    double Area;
     
     Labeling();
     
