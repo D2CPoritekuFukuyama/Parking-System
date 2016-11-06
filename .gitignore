@@ -1,4 +1,4 @@
-**/.DS_Store
+**/*DS_Store
 openCVtest1.xcodeproj/
 */Makefile
 Nplate_rcg/main
@@ -8,3 +8,4 @@ Nplate_rcg/main
 **/Number.jpg
 Nplate_rcg/image
 **/*.o
+
