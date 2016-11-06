@@ -15,7 +15,7 @@
 
 #endif /* templateMatch_hpp */
 
-class TemplateMatch{
+class NplateMatch{
 private:
     void location_sort();
     int Number_Matching(IplImage *src_img);
@@ -23,6 +23,7 @@ private:
     std::string Hiragana_Matching(IplImage *src_img);
 public:
     std::string Matching();
-    int location[4][2]; //ナンバーのx座標と数字を格納
-    int category_num[3][2];
+    std::string cate_num;
+    std::string number;
+    std::string hiragana;
 };
