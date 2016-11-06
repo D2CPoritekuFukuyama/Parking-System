@@ -10,11 +10,25 @@
 #include "cv.h"
 #include "highgui.h"
 #include "cxcore.h"
+#include "WarpPerspective.hpp"
 
-//#define VISUAL
-#define TOLERANCE 60
+#define VISUAL
+#define TOLERANCE 150
 
 using namespace cv;
+
+typedef int (CV_CDECL* CvCmpFunc)(const void* a, const void* b, void* userdata);
+
+static int cmp_func( const void* _a, const void* _b, void* userdata )
+{
+    CvPoint* a = (CvPoint*)_a;
+    CvPoint* b = (CvPoint*)_b;
+    int y_diff = a->y - b->y;
+    int x_diff = a->x - b->x;
+    //return y_diff ? y_diff : x_diff;
+    
+    return a->y < b->y ? y_diff : x_diff;
+}
 
 Labeling::Labeling(){
     videoCapture = cvCreateCameraCapture( 0 );
@@ -48,11 +62,12 @@ void Labeling::DrawNextContour(
     for (; Contour != 0; Contour = Contour ->h_next) {
         //輪郭のポリゴン近似
         CvSeq *approx = cvApproxPoly(Contour, sizeof(CvContour), NULL, CV_POLY_APPROX_DP, 20); //25
-        
+        //cvSeqSort(approx, cmp_func,0);
         //頂点四つ且つcheck_rectangle
         if(approx->total == 4 && check_rectangle(approx))
         {
-        
+            WarpPerspective warpPerspective = WarpPerspective(frame, approx);
+            warpPerspective.conversion();
             cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
             if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
@@ -61,6 +76,7 @@ void Labeling::DrawNextContour(
         }
     }
 }
+
 
 bool Labeling::check_rectangle(CvSeq *Nplate_point){
     int target[4][2];   //4つの座標格納
@@ -80,25 +96,32 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
         diffe[i][1] = abs(target[i+2][1] - target[i][1]);
     }
    
-    //1:2の比率に近く、直角に近ければtrue
-    if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE)
-    {
-        if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
-            if(abs(diffe[0][0] - diffe[1][0]) <= TOLERANCE){
-                if(abs(diffe[0][1] - diffe[1][1]) <= TOLERANCE){
-                    //4点を包含する矩形を求める
-                    //面積
-                    //一番大きい面積の長方形をナンバープレートの座標として保存
-                    if (Area <= fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ))){
-                        Area = fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ));
-                        Nplate_rect = cvBoundingRect(Nplate_point, 0);
-                    }
-                    return true;
-                }
-            }
+    Mat angle1, angle2,magnitude;
+    cartToPolar(target[1][0], target[1][1], magnitude, angle1, true);
+    cartToPolar(target[3][0], target[3][1], magnitude, angle2, true);
+    if(angle1.at<double>(0) < 55 && angle1.at<double>(0) > 25){
+        std::cout << angle1.at<double>(0) << std::endl;
+        if(angle2.at<double>(0) < 55 && angle2.at<double>(0) > 25){
+             if(fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ)) > 1000)
+                 //1:2の比率に近く、直角に近ければtrue
+                 if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE){
+                     if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
+                        return true;
+                     }else
+                         return false;
+                 }else
+                     return false;
+            else
+                return false;
+        }else{
+            return false;
         }
-    }
-    return false;
+    }else
+        return false;
+
+    
+
+    
     
 }
 
