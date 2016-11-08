@@ -55,7 +55,10 @@ void Labeling::DrawNextContour(
         {
             WarpPerspective warpPerspective = WarpPerspective(frame, approx);
             warpPerspective.conversion();
-            cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
+            #ifdef VISUAL
+                draw_poly(approx);
+            #endif
+            //cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
             
             if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
@@ -99,16 +102,14 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
     Mat angle1, angle2,magnitude;
     cartToPolar(target[1][0], target[1][1], magnitude, angle1, true);
     cartToPolar(target[3][0], target[3][1], magnitude, angle2, true);
+    //角度でフィルタリング
     if(angle1.at<double>(0) < 55 && angle1.at<double>(0) > 25){
-        //std::cout << angle1.at<double>(0) << std::endl;
         if(angle2.at<double>(0) < 55 && angle2.at<double>(0) > 25){
+            //面積が1000以上
              if(fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ)) > 1000)
                  //1:2の比率に近く、直角に近ければtrue
                  if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE){
                      if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
-                    #ifdef VISUAL
-                         draw_poly(Nplate_point);
-                    #endif
                         return true;
                      }else
                          return false;
