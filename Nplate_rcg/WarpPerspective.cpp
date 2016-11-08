@@ -42,7 +42,6 @@ WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
 IplImage WarpPerspective::conversion(){
     IplImage *dst_img = NULL;
      dst_img = cvCloneImage (src_img);
-    cvShowImage("test2", src_img);
      //透視投影変換を実行する
     CvMat *map_matrix = cvCreateMat(3, 3, CV_32FC1);
      cvGetPerspectiveTransform(src_pnt, dst_pnt, map_matrix);

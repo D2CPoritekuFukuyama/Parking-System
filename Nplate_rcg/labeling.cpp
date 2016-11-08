@@ -17,19 +17,6 @@
 
 using namespace cv;
 
-typedef int (CV_CDECL* CvCmpFunc)(const void* a, const void* b, void* userdata);
-
-static int cmp_func( const void* _a, const void* _b, void* userdata )
-{
-    CvPoint* a = (CvPoint*)_a;
-    CvPoint* b = (CvPoint*)_b;
-    int y_diff = a->y - b->y;
-    int x_diff = a->x - b->x;
-    //return y_diff ? y_diff : x_diff;
-    
-    return a->y < b->y ? y_diff : x_diff;
-}
-
 Labeling::Labeling(){
     videoCapture = cvCreateCameraCapture( 0 );
     cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_WIDTH, 1280);
@@ -69,12 +56,26 @@ void Labeling::DrawNextContour(
             WarpPerspective warpPerspective = WarpPerspective(frame, approx);
             warpPerspective.conversion();
             cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
+            
             if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
                 //trimming(gray_img);
             }
         }
     }
+}
+
+void Labeling::draw_poly(CvSeq *approx){
+    int npts[1] = {4};
+    CvPoint **pts;
+    pts = (CvPoint **)cvAlloc(sizeof(CvPoint*));
+    pts[0] = (CvPoint *)cvAlloc(sizeof(CvPoint) * 4);
+//4角形の座標をtargetに格納
+    for (int i = 0; i < approx -> total; ++i) {
+        pts[0][i] = *(CvPoint*)cvGetSeqElem(approx, i);
+    }
+    cvPolyLine(frame, pts, npts, 1, true, CV_RGB(255, 0, 0),8);
+    cvShowImage("drawPoly", frame);
 }
 
 
@@ -95,17 +96,19 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
         diffe[i][0] = abs(target[i+2][0] - target[i][0]);
         diffe[i][1] = abs(target[i+2][1] - target[i][1]);
     }
-   
     Mat angle1, angle2,magnitude;
     cartToPolar(target[1][0], target[1][1], magnitude, angle1, true);
     cartToPolar(target[3][0], target[3][1], magnitude, angle2, true);
     if(angle1.at<double>(0) < 55 && angle1.at<double>(0) > 25){
-        std::cout << angle1.at<double>(0) << std::endl;
+        //std::cout << angle1.at<double>(0) << std::endl;
         if(angle2.at<double>(0) < 55 && angle2.at<double>(0) > 25){
              if(fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ)) > 1000)
                  //1:2の比率に近く、直角に近ければtrue
                  if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE){
                      if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
+                    #ifdef VISUAL
+                         draw_poly(Nplate_point);
+                    #endif
                         return true;
                      }else
                          return false;
@@ -118,11 +121,6 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
         }
     }else
         return false;
-
-    
-
-    
-    
 }
 
 //ラベリング関数
@@ -150,7 +148,7 @@ void Labeling::cv_Labelling(
     }
     resutl_img = dst_img;
     #ifdef VISUAL
-        cvShowImage("Labeling", resutl_img);
+        //cvShowImage("Labeling", resutl_img);
     #endif
     Area = 0;
         cvReleaseMemStorage(&storage);
