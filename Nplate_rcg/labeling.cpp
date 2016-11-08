@@ -12,7 +12,7 @@
 #include "cxcore.h"
 #include "WarpPerspective.hpp"
 
-#define VISUAL
+//#define VISUAL
 #define TOLERANCE 150
 
 using namespace cv;
@@ -137,7 +137,6 @@ void Labeling::cv_Labelling(
         DrawNextContour(dst_img, contours, 1);
     }
     resutl_img = dst_img;
-<<<<<<< HEAD:Nplate_rcg/labeling.cpp
     #ifdef VISUAL
         //cvShowImage("Labeling", resutl_img);
     #endif
@@ -152,6 +151,10 @@ void Labeling::trimming(IplImage *src_img){
     
     Mat cut_img(src_mat, Nplate_rect); //プレートのトリミング
     Nplate_point = cut_img;
+    resize(Nplate_point, Nplate_point, cvSize(300, 150));  //200 x 100にリサイズ
+    Mat Nplate_up1(Nplate_point, Rect(65, 0, 95, 55));
+    Mat Nplate_up2(Nplate_point, Rect(160,0, 85, 55));
+    Mat Nplate_up(Nplate_point, Rect(65,0,180, 55));
     Mat Nplate_down(Nplate_point, Rect(10,50,285,100));
 
     contrast_correct(Nplate_point);
