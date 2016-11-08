@@ -11,19 +11,6 @@
 using namespace cv;
 using namespace std;
 
-/*typedef int (CV_CDECL* CvCmpFunc)(const void* a, const void* b, void* userdata);
-
-static int cmp_func( const void* _a, const void* _b, void* userdata )
-{
-    CvPoint* a = (CvPoint*)_a;
-    CvPoint* b = (CvPoint*)_b;
-    int y_diff = a->y - b->y;
-    int x_diff = a->x - b->x;
-    //return y_diff ? y_diff : x_diff;
-     
-    return a->y < b->y ? y_diff : x_diff;
-}
- */
 
 WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
     src_img = target_img;
@@ -50,6 +37,6 @@ IplImage WarpPerspective::conversion(){
                        map_matrix,
                        CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS,
                        cvScalarAll (100));
-    cvShowImage("test", dst_img);
+    //cvShowImage("test", dst_img);
     return *dst_img;
 }

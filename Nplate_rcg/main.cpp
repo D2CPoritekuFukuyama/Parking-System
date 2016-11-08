@@ -11,7 +11,7 @@
 #include "NplateMatch.hpp"
 
 #define VISUAL
-#define DEBUG_LABELING
+//#define DEBUG_LABELING
 using namespace cv;
 
 int main (int argc, char **argv)

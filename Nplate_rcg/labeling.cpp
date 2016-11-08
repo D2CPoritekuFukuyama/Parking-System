@@ -110,6 +110,7 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
                  //1:2の比率に近く、直角に近ければtrue
                  if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE){
                      if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
+                         Nplate_rect = cvBoundingRect(Nplate_point,0);
                         return true;
                      }else
                          return false;
