@@ -34,17 +34,6 @@ void Labeling::DrawNextContour(
                 CvSeq *Contour, //輪郭へのポインタ
                 int Level //輪郭のレベル（階層）
 ){
-    // 輪郭を描画する色の設定
-    CvScalar ContoursColor;
-    
-    if ((Level % 2) == 1){
-        //白の輪郭の場合、赤で輪郭を描画
-        ContoursColor = CV_RGB( 255, 0, 0 );
-    }else{
-        //黒の輪郭の場合、青で輪郭を描画
-        ContoursColor = CV_RGB( 0, 0, 255 );
-    }
-    
     
     for (; Contour != 0; Contour = Contour ->h_next) {
         //輪郭のポリゴン近似
@@ -58,7 +47,6 @@ void Labeling::DrawNextContour(
             #ifdef VISUAL
                 draw_poly(approx);
             #endif
-            //cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
             
             if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
