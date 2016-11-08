@@ -10,9 +10,10 @@
 #include "cv.h"
 #include "highgui.h"
 #include "cxcore.h"
+#include "WarpPerspective.hpp"
 
-//#define VISUAL
-#define TOLERANCE 60
+#define VISUAL
+#define TOLERANCE 150
 
 using namespace cv;
 
@@ -48,12 +49,17 @@ void Labeling::DrawNextContour(
     for (; Contour != 0; Contour = Contour ->h_next) {
         //輪郭のポリゴン近似
         CvSeq *approx = cvApproxPoly(Contour, sizeof(CvContour), NULL, CV_POLY_APPROX_DP, 20); //25
-        
+        //cvSeqSort(approx, cmp_func,0);
         //頂点四つ且つcheck_rectangle
         if(approx->total == 4 && check_rectangle(approx))
         {
-        
-            cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
+            WarpPerspective warpPerspective = WarpPerspective(frame, approx);
+            warpPerspective.conversion();
+            #ifdef VISUAL
+                draw_poly(approx);
+            #endif
+            //cvDrawContours( img, approx, ContoursColor, ContoursColor, 0, 2);
+            
             if (Contour -> h_next != NULL){
                 DrawNextContour(img, approx->h_next, Level);
                 //trimming(gray_img);
@@ -61,6 +67,20 @@ void Labeling::DrawNextContour(
         }
     }
 }
+
+void Labeling::draw_poly(CvSeq *approx){
+    int npts[1] = {4};
+    CvPoint **pts;
+    pts = (CvPoint **)cvAlloc(sizeof(CvPoint*));
+    pts[0] = (CvPoint *)cvAlloc(sizeof(CvPoint) * 4);
+//4角形の座標をtargetに格納
+    for (int i = 0; i < approx -> total; ++i) {
+        pts[0][i] = *(CvPoint*)cvGetSeqElem(approx, i);
+    }
+    cvPolyLine(frame, pts, npts, 1, true, CV_RGB(255, 0, 0),8);
+    cvShowImage("drawPoly", frame);
+}
+
 
 bool Labeling::check_rectangle(CvSeq *Nplate_point){
     int target[4][2];   //4つの座標格納
@@ -79,27 +99,29 @@ bool Labeling::check_rectangle(CvSeq *Nplate_point){
         diffe[i][0] = abs(target[i+2][0] - target[i][0]);
         diffe[i][1] = abs(target[i+2][1] - target[i][1]);
     }
-   
-    //1:2の比率に近く、直角に近ければtrue
-    if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE)
-    {
-        if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
-            if(abs(diffe[0][0] - diffe[1][0]) <= TOLERANCE){
-                if(abs(diffe[0][1] - diffe[1][1]) <= TOLERANCE){
-                    //4点を包含する矩形を求める
-                    //面積
-                    //一番大きい面積の長方形をナンバープレートの座標として保存
-                    if (Area <= fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ))){
-                        Area = fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ));
-                        Nplate_rect = cvBoundingRect(Nplate_point, 0);
-                    }
-                    return true;
-                }
-            }
+    Mat angle1, angle2,magnitude;
+    cartToPolar(target[1][0], target[1][1], magnitude, angle1, true);
+    cartToPolar(target[3][0], target[3][1], magnitude, angle2, true);
+    //角度でフィルタリング
+    if(angle1.at<double>(0) < 55 && angle1.at<double>(0) > 25){
+        if(angle2.at<double>(0) < 55 && angle2.at<double>(0) > 25){
+            //面積が1000以上
+             if(fabs(cvContourArea(Nplate_point, CV_WHOLE_SEQ)) > 1000)
+                 //1:2の比率に近く、直角に近ければtrue
+                 if(abs(diffe[0][0] - (2 * diffe[0][1])) <= TOLERANCE){
+                     if(abs(diffe[1][0] - (2 * diffe[1][1])) <= TOLERANCE){
+                        return true;
+                     }else
+                         return false;
+                 }else
+                     return false;
+            else
+                return false;
+        }else{
+            return false;
         }
-    }
-    return false;
-    
+    }else
+        return false;
 }
 
 //ラベリング関数
@@ -127,7 +149,7 @@ void Labeling::cv_Labelling(
     }
     resutl_img = dst_img;
     #ifdef VISUAL
-        cvShowImage("Labeling", resutl_img);
+        //cvShowImage("Labeling", resutl_img);
     #endif
     Area = 0;
         cvReleaseMemStorage(&storage);

@@ -25,6 +25,7 @@ private:
     );
     bool check_rectangle(CvSeq *Nplate_point);
     void contrast_correct(cv::Mat img);
+    void draw_poly(CvSeq *approx);
 public:
     IplImage *frame; //webカメラの画像格納用
     IplImage *gray_img;//グレースケール画像
