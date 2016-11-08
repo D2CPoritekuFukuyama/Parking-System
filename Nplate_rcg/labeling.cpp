@@ -12,7 +12,7 @@
 #include "cxcore.h"
 #include "WarpPerspective.hpp"
 
-#define VISUAL
+//#define VISUAL
 #define TOLERANCE 150
 
 using namespace cv;
