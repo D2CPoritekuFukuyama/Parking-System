@@ -14,16 +14,25 @@ using namespace std;
 
 WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
     src_img = target_img;
-    //cvSeqSort(approx, cmp_func,0);
+    dst_img = cvCloneImage(src_img);
+    
+
+
     for (int i = 0; i < approx -> total; ++i) {
         CvPoint *p = (CvPoint*)cvGetSeqElem(approx, i);
         src_pnt[i] = cvPoint2D32f(p -> x, p -> y);        
     }
     
+    dst_pnt[0] = cvPoint2D32f (0.0, 0.0);
+    dst_pnt[1] = cvPoint2D32f (dst_img->width, 0.0);
+    dst_pnt[2] = cvPoint2D32f (dst_img->width, dst_img->height);
+    dst_pnt[3] = cvPoint2D32f (0.0, dst_img->height);
+/*
     dst_pnt[0] = cvPoint2D32f (150.0, 150.0);
     dst_pnt[1] = cvPoint2D32f (150.0, 300.0);
     dst_pnt[2] = cvPoint2D32f (350.0, 300.0);
     dst_pnt[3] = cvPoint2D32f (350.0, 150.0);
+ */
 }
 
 IplImage WarpPerspective::conversion(){
@@ -37,6 +46,6 @@ IplImage WarpPerspective::conversion(){
                        map_matrix,
                        CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS,
                        cvScalarAll (100));
-    //cvShowImage("test", dst_img);
+    cvShowImage("test", dst_img);
     return *dst_img;
 }
