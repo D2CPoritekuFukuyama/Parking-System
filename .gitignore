@@ -13,3 +13,4 @@ motor/gate_open
 motor/gate_close
 motor/motor
 printer
+Gemfile.lock
