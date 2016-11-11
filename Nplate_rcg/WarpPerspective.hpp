@@ -14,6 +14,8 @@
 #include "highgui.h"
 
 class WarpPerspective{
+private:
+    void get_ConvexHull(CvSeq *approx);
 public:
     IplImage *src_img;
     IplImage *dst_img;

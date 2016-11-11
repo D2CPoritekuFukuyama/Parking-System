@@ -1,4 +1,4 @@
-//
+ //
 //  WarpPerspective.cpp
 //  openCVtest1
 //
@@ -11,41 +11,78 @@
 using namespace cv;
 using namespace std;
 
+typedef int (CV_CDECL* CvCmpFunc)(const void* a, const void* b, void* userdata);
+
 
 WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
     src_img = target_img;
     dst_img = cvCloneImage(src_img);
     
-
-
     for (int i = 0; i < approx -> total; ++i) {
         CvPoint *p = (CvPoint*)cvGetSeqElem(approx, i);
-        src_pnt[i] = cvPoint2D32f(p -> x, p -> y);        
+        src_pnt[i] = cvPoint2D32f(p -> x, p -> y);
     }
+    get_ConvexHull(approx);
+     
+        
     
-    dst_pnt[0] = cvPoint2D32f (0.0, 0.0);
-    dst_pnt[1] = cvPoint2D32f (dst_img->width, 0.0);
-    dst_pnt[2] = cvPoint2D32f (dst_img->width, dst_img->height);
-    dst_pnt[3] = cvPoint2D32f (0.0, dst_img->height);
-/*
-    dst_pnt[0] = cvPoint2D32f (150.0, 150.0);
-    dst_pnt[1] = cvPoint2D32f (150.0, 300.0);
-    dst_pnt[2] = cvPoint2D32f (350.0, 300.0);
-    dst_pnt[3] = cvPoint2D32f (350.0, 150.0);
- */
+    dst_pnt[0] = cvPoint2D32f (dst_img->width, 0.0);
+    dst_pnt[1] = cvPoint2D32f (dst_img->width, dst_img->height);
+    dst_pnt[2] = cvPoint2D32f (0.0, dst_img->height);
+    dst_pnt[3] = cvPoint2D32f (0.0, 0.0);
+
+    /*
+    dst_pnt[3] = cvPoint2D32f (150.0, 150.0);
+    dst_pnt[2] = cvPoint2D32f (150.0, 300.0);
+    dst_pnt[1] = cvPoint2D32f (350.0, 300.0);
+    dst_pnt[0] = cvPoint2D32f (350.0, 150.0);
+*/ 
+}
+
+void WarpPerspective::get_ConvexHull(CvSeq *approx){
+    int x_diff, y_diff;
+    CvSeq *ptseq, *hull;
+    int hullcount,i;
+    CvMemStorage* storage = cvCreateMemStorage();
+    
+    ptseq = cvCreateSeq( CV_SEQ_KIND_GENERIC|CV_32SC2, sizeof(CvContour),
+                               sizeof(CvPoint), storage );
+    
+    for( i = 0; i < approx -> total; i++ )
+    {
+        CvPoint p = *(CvPoint*)cvGetSeqElem(approx, i);
+        cvSeqPush( ptseq, &p);
+    }
+    hull = cvConvexHull2( ptseq, 0, CV_COUNTER_CLOCKWISE, 0 );
+    hullcount = hull->total;
+    for (i = 0; i < hullcount; i++) {
+        CvPoint p = **CV_GET_SEQ_ELEM( CvPoint*, hull, i );
+        src_pnt[i].x = (double)p.x;
+        src_pnt[i].y = (double)p.y;
+    }
+    x_diff = 1;
+    y_diff = 0;
+    //if (x_diff < y_diff){
+    if (src_pnt[1].x < src_pnt[3].x) {
+        CvPoint2D32f tmp_p = cvPoint2D32f(src_pnt[hullcount - 1].x, src_pnt[hullcount -1].y);
+        for (i = hullcount - 1; i > 0; i--) {
+            src_pnt[i] = src_pnt[i - 1];
+        }
+        src_pnt[0] = tmp_p;
+    }
+    cvClearMemStorage( storage );
 }
 
 IplImage WarpPerspective::conversion(){
-    IplImage *dst_img = NULL;
-     dst_img = cvCloneImage (src_img);
      //透視投影変換を実行する
     CvMat *map_matrix = cvCreateMat(3, 3, CV_32FC1);
-     cvGetPerspectiveTransform(src_pnt, dst_pnt, map_matrix);
+    cvGetPerspectiveTransform(src_pnt, dst_pnt, map_matrix);
     cvWarpPerspective (src_img,
                        dst_img,
                        map_matrix,
                        CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS,
                        cvScalarAll (100));
+    //cvFlip(dst_img,dst_img,1);
     cvShowImage("test", dst_img);
     return *dst_img;
 }
