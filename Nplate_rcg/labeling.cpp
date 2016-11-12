@@ -19,8 +19,8 @@ using namespace cv;
 
 Labeling::Labeling(){
     videoCapture = cvCreateCameraCapture( 0 );
-    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_WIDTH, 1280);
-    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_HEIGHT, 720);
+    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_WIDTH, 480);
+    cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_HEIGHT, 320);
     frame = cvQueryFrame(videoCapture);
     gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
@@ -34,11 +34,9 @@ void Labeling::DrawNextContour(
                 CvSeq *Contour, //輪郭へのポインタ
                 int Level //輪郭のレベル（階層）
 ){
-    
     for (; Contour != 0; Contour = Contour ->h_next) {
         //輪郭のポリゴン近似
         CvSeq *approx = cvApproxPoly(Contour, sizeof(CvContour), NULL, CV_POLY_APPROX_DP, 20); //25
-        //cvSeqSort(approx, cmp_func,0);
         //頂点四つ且つcheck_rectangle
         if(approx->total == 4 && check_rectangle(approx))
         {
@@ -65,7 +63,8 @@ void Labeling::draw_poly(CvSeq *approx){
     for (int i = 0; i < approx -> total; ++i) {
         pts[0][i] = *(CvPoint*)cvGetSeqElem(approx, i);
     }
-    cvPolyLine(frame, pts, npts, 1, true, CV_RGB(255, 0, 0),8);
+    cvPolyLine(frame, pts, npts, 1, true, CV_RGB(255, 0, 0),4);
+    moveWindow("drawPoly", 500, 0);
     cvShowImage("drawPoly", frame);
 }
 
@@ -141,7 +140,7 @@ void Labeling::cv_Labelling(
         //cvShowImage("Labeling", resutl_img);
     #endif
     Area = 0;
-        cvReleaseMemStorage(&storage);
+    cvReleaseMemStorage(&storage);
 }
 
 //トリミング関数
@@ -187,6 +186,10 @@ void Labeling::Binarization(
     //適応的閾値処理
     cvAdaptiveThreshold(src_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
     cvAnd(bin_img1, bin_img2, dst_img); //二つの２値化画像の論理積
+#ifdef VISUAL
+    moveWindow("bin", 500, 500);
+    cvShowImage("bin", dst_img);
+#endif
     //cvShowImage("bin1", bin_img1);
     //cvShowImage("bin2", bin_img2);
     //cvShowImage("result", dst_img);

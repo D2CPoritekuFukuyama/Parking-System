@@ -28,7 +28,7 @@ class Nplate_RCG
 
     def fetch_area_name
         @area = OCR_Recognize.parse_json(OCR_Recognize.get_AreaName())
-        #puts @area
+        puts @area
         File.foreach('Area.text') do |a|
             if a =~ /[*#{area}*]/
                 @area = a

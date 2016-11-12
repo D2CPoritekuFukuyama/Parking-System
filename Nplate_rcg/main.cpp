@@ -11,7 +11,7 @@
 #include "NplateMatch.hpp"
 
 #define VISUAL
-//#define DEBUG_LABELING
+#define DEBUG_LABELING
 using namespace cv;
 
 int main (int argc, char **argv)
@@ -27,7 +27,6 @@ int main (int argc, char **argv)
 #ifdef VISUAL
     cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
 #endif
-
     
     while (1) {
         cvCvtColor(labeling.frame, labeling.gray_img, CV_RGB2GRAY);
