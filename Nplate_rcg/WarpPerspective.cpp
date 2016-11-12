@@ -24,8 +24,7 @@ WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
     }
     get_ConvexHull(approx);
      
-        
-    
+    //変換後のCvPoint2d32f
     dst_pnt[0] = cvPoint2D32f (dst_img->width, 0.0);
     dst_pnt[1] = cvPoint2D32f (dst_img->width, dst_img->height);
     dst_pnt[2] = cvPoint2D32f (0.0, dst_img->height);
@@ -39,6 +38,7 @@ WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
 */ 
 }
 
+//座標の凸包を求める
 void WarpPerspective::get_ConvexHull(CvSeq *approx){
     int x_diff, y_diff;
     CvSeq *ptseq, *hull;
@@ -82,7 +82,7 @@ IplImage WarpPerspective::conversion(){
                        map_matrix,
                        CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS,
                        cvScalarAll (100));
-    //cvFlip(dst_img,dst_img,1);
+    moveWindow("test", 0, 500);
     cvShowImage("test", dst_img);
     return *dst_img;
 }

@@ -64,7 +64,7 @@ void Labeling::draw_poly(CvSeq *approx){
         pts[0][i] = *(CvPoint*)cvGetSeqElem(approx, i);
     }
     cvPolyLine(frame, pts, npts, 1, true, CV_RGB(255, 0, 0),4);
-    
+    moveWindow("drawPoly", 500, 0);
     cvShowImage("drawPoly", frame);
 }
 
@@ -186,6 +186,10 @@ void Labeling::Binarization(
     //適応的閾値処理
     cvAdaptiveThreshold(src_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
     cvAnd(bin_img1, bin_img2, dst_img); //二つの２値化画像の論理積
+#ifdef VISUAL
+    moveWindow("bin", 500, 500);
+    cvShowImage("bin", dst_img);
+#endif
     //cvShowImage("bin1", bin_img1);
     //cvShowImage("bin2", bin_img2);
     //cvShowImage("result", dst_img);
