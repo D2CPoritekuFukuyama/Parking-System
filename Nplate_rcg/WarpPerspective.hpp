@@ -21,6 +21,7 @@ public:
     IplImage *dst_img;
     CvPoint2D32f src_pnt[4];
     CvPoint2D32f dst_pnt[4];
+    CvSeq *hull;
     WarpPerspective(IplImage *target_img, CvSeq *approx);
     IplImage conversion();
 };

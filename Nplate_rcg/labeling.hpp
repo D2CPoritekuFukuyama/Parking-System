@@ -19,18 +19,18 @@
 class Labeling{
 private:
     void DrawNextContour(
-                         IplImage *img,//ラベリング結果を描画するIplImage(8Bit3chカラー）
                          CvSeq *Contour, //輪郭へのポインタ
                          int Level //輪郭のレベル（階層）
     );
-    bool check_rectangle(CvSeq *Nplate_point);
+    bool check_rectangle(CvSeq *Nplate_seq);
     void contrast_correct(cv::Mat img);
     void draw_poly(CvSeq *approx);
+    void Binarization();
 public:
     IplImage *frame; //webカメラの画像格納用
     IplImage *gray_img;//グレースケール画像
     IplImage *bin_img;//2値化画像
-    IplImage *resutl_img;//ラベリング結果
+    IplImage *result_img;//ラベリング結果
     cv::Mat Nplate_point;
     CvCapture *videoCapture;
     cv::Rect Nplate_rect; //ナンバーの位置を格納
@@ -38,16 +38,8 @@ public:
     
     Labeling();
     
-    void cv_Labelling(
-                      IplImage *src_img,
-                      IplImage *dst_img
-                      );
-    
-    void Binarization(
-                      IplImage *src_img,
-                      IplImage *dst_img
-                      );
-    
+    void cv_Labelling();
+
     void trimming(IplImage *src_img);
     
 

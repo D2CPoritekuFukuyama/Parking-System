@@ -38,10 +38,10 @@ WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
 */ 
 }
 
-//座標の凸包を求める
+//凸包を求めて、座標シーケンスのスタート位置を統一化
 void WarpPerspective::get_ConvexHull(CvSeq *approx){
     int x_diff, y_diff;
-    CvSeq *ptseq, *hull;
+    CvSeq *ptseq;
     int hullcount,i;
     CvMemStorage* storage = cvCreateMemStorage();
     
@@ -55,10 +55,10 @@ void WarpPerspective::get_ConvexHull(CvSeq *approx){
     }
     hull = cvConvexHull2( ptseq, 0, CV_COUNTER_CLOCKWISE, 0 );
     hullcount = hull->total;
+    
     for (i = 0; i < hullcount; i++) {
         CvPoint p = **CV_GET_SEQ_ELEM( CvPoint*, hull, i );
-        src_pnt[i].x = (double)p.x;
-        src_pnt[i].y = (double)p.y;
+        src_pnt[i] = cvPointTo32f(p);
     }
     x_diff = 1;
     y_diff = 0;
@@ -73,8 +73,10 @@ void WarpPerspective::get_ConvexHull(CvSeq *approx){
     cvClearMemStorage( storage );
 }
 
+
 IplImage WarpPerspective::conversion(){
      //透視投影変換を実行する
+    IplImage *result_img = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
     CvMat *map_matrix = cvCreateMat(3, 3, CV_32FC1);
     cvGetPerspectiveTransform(src_pnt, dst_pnt, map_matrix);
     cvWarpPerspective (src_img,
@@ -83,6 +85,8 @@ IplImage WarpPerspective::conversion(){
                        CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS,
                        cvScalarAll (100));
     moveWindow("test", 0, 500);
-    cvShowImage("test", dst_img);
-    return *dst_img;
+    cvShowImage("test", result_img);
+    cvCvtColor(dst_img, result_img, CV_RGB2GRAY);
+    
+    return *result_img;
 }

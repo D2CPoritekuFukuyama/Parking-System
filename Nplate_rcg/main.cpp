@@ -11,7 +11,7 @@
 #include "NplateMatch.hpp"
 
 #define VISUAL
-#define DEBUG_LABELING
+//#define DEBUG_LABELING
 using namespace cv;
 
 int main (int argc, char **argv)
@@ -29,21 +29,20 @@ int main (int argc, char **argv)
 #endif
     
     while (1) {
-        cvCvtColor(labeling.frame, labeling.gray_img, CV_RGB2GRAY);
 #ifdef VISUAL
         cvShowImage("webCamera", labeling.frame);
 #endif
 
-            labeling.Binarization(labeling.gray_img, labeling.bin_img);
-            labeling.cv_Labelling(labeling.bin_img, labeling.resutl_img);
+            labeling.cv_Labelling();
+        
 #ifdef DEBUG_LABELING
         if (cvWaitKey(1) == 0x71) {
             break;
         }
 #endif
 #if !defined DEBUG_LABELING
-            if (labeling.Nplate_rect.width > 0 || labeling.Nplate_rect.height > 0){
-                labeling.trimming(labeling.gray_img);
+            if (labeling.result_img != NULL){
+                //labeling.trimming();
                 result = nplateMatch.Matching();
                 if (result[0] != ' ') {
                     printf("%s\n", result.c_str());
