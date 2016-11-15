@@ -16,13 +16,14 @@ class Nplate_RCG
 
     def fetch_car_number
         begin
-            stdin, stdout, stderr = Open3.capture3('../openCVtest1/main')
+            stdin, stdout, stderr = Open3.capture3('../Nplate_rcg/main ')
         rescue => ex
             p stderr
             p ex
         end
         stdArray = stdin.split("\n")
         @nPlate = stdArray[0].split(" ")
+		p @nPlate
     end
     private :fetch_car_number
 
