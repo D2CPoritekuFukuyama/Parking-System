@@ -14,3 +14,4 @@ motor/gate_close
 motor/motor
 printer
 Gemfile.lock
+**/+.out
