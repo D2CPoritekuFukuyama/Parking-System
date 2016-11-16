@@ -13,7 +13,7 @@
 #include "WarpPerspective.hpp"
 #include <math.h>
 
-#define VISUAL
+//#define VISUAL
 #define TOLERANCE 90
 
 using namespace cv;
@@ -149,7 +149,7 @@ void Labeling::cv_Labelling(){
 //トリミング関数
 //ラベリング時に取得したナンバープレートの点列を用いてトリミング
 void Labeling::trimming(IplImage *src_img){
-    IplImage *gray_src = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
+    Ptr<IplImage> gray_src = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
     cvCvtColor(src_img, gray_src, CV_RGB2GRAY);
     result_img = cvCreateImage(cvSize(300, 150), IPL_DEPTH_8U, 1);
     
@@ -181,8 +181,8 @@ void Labeling::contrast_correct(Mat img){
 
 //2値化関数
 void Labeling::Binarization(){
-    IplImage *bin_img1 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
-    IplImage *bin_img2 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
+    Ptr<IplImage> bin_img1 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
+    Ptr<IplImage> bin_img2 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
     cvThreshold(gray_img, bin_img1, 165, 255, CV_THRESH_BINARY); //閾値165で2値化
     //適応的閾値処理
     cvAdaptiveThreshold(gray_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);

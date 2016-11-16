@@ -76,7 +76,7 @@ void WarpPerspective::get_ConvexHull(CvSeq *approx){
 
 IplImage WarpPerspective::conversion(){
      //透視投影変換を実行する
-    IplImage *result_img = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
+    Ptr<IplImage> result_img = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
     CvMat *map_matrix = cvCreateMat(3, 3, CV_32FC1);
     cvGetPerspectiveTransform(src_pnt, dst_pnt, map_matrix);
     cvWarpPerspective (src_img,
