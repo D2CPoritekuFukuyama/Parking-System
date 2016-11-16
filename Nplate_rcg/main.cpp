@@ -11,7 +11,7 @@
 #include "NplateMatch.hpp"
 
 #define VISUAL
-//#define DEBUG_LABELING
+#define DEBUG_LABELING
 using namespace cv;
 
 int main (int argc, char **argv)
@@ -59,7 +59,7 @@ int main (int argc, char **argv)
         labeling.frame = cvQueryFrame(labeling.videoCapture);
     }
 
-    cvReleaseCapture(&labeling.videoCapture);
-    cvDestroyAllWindows();
+    //cvReleaseCapture(&labeling.videoCapture);
+    //cvDestroyAllWindows();
     return 0;
 }

@@ -13,7 +13,7 @@
 #include "WarpPerspective.hpp"
 #include <math.h>
 
-//#define VISUAL
+#define VISUAL
 #define TOLERANCE 90
 
 using namespace cv;
@@ -22,6 +22,9 @@ Labeling::Labeling(){
     videoCapture = cvCreateCameraCapture( 0 );
     cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_WIDTH, 480);
     cvSetCaptureProperty(videoCapture, CV_CAP_PROP_FRAME_HEIGHT, 320);
+    moveWindow("bin", 500, 500);
+    moveWindow("drawPoly", 500, 0);
+    moveWindow("test", 0, 500);
     frame = cvQueryFrame(videoCapture);
     gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
@@ -44,11 +47,14 @@ void Labeling::DrawNextContour(
             
             if (check_rectangle(warpPerspective.hull)) {
                 warpPerspective.conversion();
+    			cvShowImage("test", warpPerspective.dst_img);
                 #ifdef VISUAL
                     draw_poly(approx);
                 #endif
 #if !defined VISUAL
+				printf("トリミング開始\n");
                 trimming(warpPerspective.dst_img);
+				printf("トリミング終了\n");
 #endif
                 if (Contour -> h_next != NULL){
                     DrawNextContour(approx->h_next, Level);
@@ -69,7 +75,6 @@ void Labeling::draw_poly(CvSeq *approx){
         pts[0][i] = *(CvPoint*)cvGetSeqElem(approx, i);
     }
     cvPolyLine(frame, pts, npts, 1, true, CV_RGB(255, 0, 0),4);
-    moveWindow("drawPoly", 500, 0);
     cvShowImage("drawPoly", frame);
 }
 
@@ -162,6 +167,7 @@ void Labeling::trimming(IplImage *src_img){
     imwrite("image/Nplate-up1.jpg", Nplate_up1);
     imwrite("image/Nplate-cate.jpg", Nplate_up2);
     imwrite("image/Nplate-down.jpg", Nplate_down);
+	cvSaveImage("image/Nplate.jpg", result_img);
 }
 
 void Labeling::contrast_correct(Mat img){
@@ -181,10 +187,7 @@ void Labeling::Binarization(){
     //適応的閾値処理
     cvAdaptiveThreshold(gray_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
     cvAnd(bin_img1, bin_img2, bin_img); //二つの２値化画像の論理積
-#ifdef VISUAL
-    moveWindow("bin", 500, 500);
     cvShowImage("bin", bin_img);
-#endif
     //cvShowImage("bin1", bin_img1);
     //cvShowImage("bin2", bin_img2);
     //cvShowImage("result", dst_img);

@@ -84,8 +84,6 @@ IplImage WarpPerspective::conversion(){
                        map_matrix,
                        CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS,
                        cvScalarAll (100));
-    moveWindow("test", 0, 500);
-    cvShowImage("test", result_img);
     cvCvtColor(dst_img, result_img, CV_RGB2GRAY);
     
     return *result_img;
