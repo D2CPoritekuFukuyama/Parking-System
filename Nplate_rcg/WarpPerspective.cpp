@@ -40,7 +40,6 @@ WarpPerspective::WarpPerspective(IplImage *target_img, CvSeq *approx){
 
 //凸包を求めて、座標シーケンスのスタート位置を統一化
 void WarpPerspective::get_ConvexHull(CvSeq *approx){
-    int x_diff, y_diff;
     CvSeq *ptseq;
     int hullcount,i;
     CvMemStorage* storage = cvCreateMemStorage();
@@ -60,9 +59,6 @@ void WarpPerspective::get_ConvexHull(CvSeq *approx){
         CvPoint p = **CV_GET_SEQ_ELEM( CvPoint*, hull, i );
         src_pnt[i] = cvPointTo32f(p);
     }
-    x_diff = 1;
-    y_diff = 0;
-    //if (x_diff < y_diff){
     if (src_pnt[1].x < src_pnt[3].x) {
         CvPoint2D32f tmp_p = cvPoint2D32f(src_pnt[hullcount - 1].x, src_pnt[hullcount -1].y);
         for (i = hullcount - 1; i > 0; i--) {

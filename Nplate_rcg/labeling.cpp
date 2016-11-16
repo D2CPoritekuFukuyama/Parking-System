@@ -28,7 +28,7 @@ Labeling::Labeling(){
     frame = cvQueryFrame(videoCapture);
     gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
-    
+	result_img = NULL;
     Area = 0;
 }
 
@@ -52,9 +52,7 @@ void Labeling::DrawNextContour(
                     draw_poly(approx);
                 #endif
 #if !defined VISUAL
-				printf("トリミング開始\n");
                 trimming(warpPerspective.dst_img);
-				printf("トリミング終了\n");
 #endif
                 if (Contour -> h_next != NULL){
                     DrawNextContour(approx->h_next, Level);
