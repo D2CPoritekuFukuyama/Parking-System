@@ -13,7 +13,7 @@
 #include "WarpPerspective.hpp"
 #include <math.h>
 
-//#define VISUAL
+#define VISUAL
 #define TOLERANCE 90
 
 using namespace cv;

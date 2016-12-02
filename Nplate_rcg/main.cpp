@@ -10,8 +10,8 @@
 #include "labeling.hpp"
 #include "NplateMatch.hpp"
 
-//#define VISUAL
-//#define DEBUG_LABELING
+#define VISUAL
+#define DEBUG_LABELING
 using namespace cv;
 
 int main (int argc, char **argv)
