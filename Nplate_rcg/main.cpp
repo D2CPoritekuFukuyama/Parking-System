@@ -8,7 +8,8 @@
 #include "cv.h"
 #include "highgui.h"
 #include "labeling.hpp"
-#include "NplateMatch.hpp"
+#include "Nplate_trim.hpp"
+#include "trimming.hpp"
 
 #define VISUAL
 #define DEBUG_LABELING
@@ -17,46 +18,34 @@ using namespace cv;
 int main (int argc, char **argv)
 {
     string result;
-    Labeling labeling = Labeling(); //ナンバープレート検出のクラス
-    NplateMatch nplateMatch = NplateMatch();
-    if( labeling.videoCapture == NULL )
-    {
-        return -1;
-    }
+    Trimming trimming = Trimming(); //ナンバープレート検出のクラス
+
     //webカメラ用window生成
 #ifdef VISUAL
     cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
 #endif
     
     while (1) {
-#ifdef VISUAL
-        cvShowImage("webCamera", labeling.frame);
-#endif
 
-            labeling.cv_Labelling();
-        
+
+        trimming.get_plateData();
 #ifdef DEBUG_LABELING
         if (cvWaitKey(1) == 0x71) {
             break;
         }
 #endif
 #if !defined DEBUG_LABELING
-            if (labeling.result_img != NULL){
-                //labeling.trimming();
-                result = nplateMatch.Matching();
-                if (result[0] != ' ') {
-                    printf("%s\n", result.c_str());
-                    cvReleaseCapture(&labeling.videoCapture);
-                    cvDestroyAllWindows();
-                    break;
-                }
+            if (nplate_trim.result_img != NULL){
+                cvSaveImage("image/test/Nplate.jpg", nplate_trim.result_img);
+                cvReleaseCapture(&nplate_trim.videoCapture);
+                cvDestroyAllWindows();
+                break;
             }
             
-            labeling.Nplate_rect = Rect(0,0,0,0);
             //locationのゼロクリア
 #endif
         
-        labeling.frame = cvQueryFrame(labeling.videoCapture);
+        
     }
 
     //cvReleaseCapture(&labeling.videoCapture);

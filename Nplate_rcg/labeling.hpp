@@ -8,6 +8,7 @@
 
 #ifndef labeling_hpp
 #define labeling_hpp
+#pragma once
 
 #include <stdio.h>
 #include "cv.h"
@@ -17,15 +18,16 @@
 
 
 class Labeling{
-private:
-    void DrawNextContour(
-                         CvSeq *Contour, //輪郭へのポインタ
-                         int Level //輪郭のレベル（階層）
-    );
-    bool check_rectangle(CvSeq *Nplate_seq);
-    void contrast_correct(cv::Mat img);
-    void draw_poly(CvSeq *approx);
+protected:
+    virtual void DrawNextContour(
+                                 CvSeq *Contour, //輪郭へのポインタ
+                                 int Level //輪郭のレベル（階層）
+    ) =0;
     void Binarization();
+    virtual void trimming(IplImage *src_img)=0;
+    void cv_Labelling(CvSeq **contours, IplImage *src_img);
+private:
+    void contrast_correct(cv::Mat img);
 public:
     IplImage *frame; //webカメラの画像格納用
     IplImage *gray_img;//グレースケール画像
@@ -33,19 +35,8 @@ public:
     IplImage *result_img;//ラベリング結果
     cv::Mat Nplate_point;
     CvCapture *videoCapture;
-    cv::Rect Nplate_rect; //ナンバーの位置を格納
-    double Area;
-    
-    Labeling();
-    
-    void cv_Labelling();
-
-    void trimming(IplImage *src_img);
-    
-
     
     
-
     
 };
 
