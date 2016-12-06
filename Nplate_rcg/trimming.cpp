@@ -6,6 +6,7 @@
 //  Copyright © 2016年 石川諒. All rights reserved.
 //
 #include "trimming.hpp"
+
 //#define NPLATE_TRIM_DBUG
 
 Trimming::Trimming(){
@@ -23,7 +24,6 @@ int Trimming::get_plateData(){
         return -1;
     //cvShowImage("nplate_down", nplate_trim.result_img);
 #ifndef NPLATE_TRIM_DBUG
-    
     elem_trimming.get_elem(nplate_trim.result_img);
 #endif
     //nplate_trim.frame = cvQueryFrame(nplate_trim.videoCapture);

@@ -25,7 +25,6 @@ void Elem_trimming::DrawNextContour(
             cvSaveImage("image/test/trim.jpg", frame);
             cvResetImageROI(frame);
             //cvRectangle(frame, cvPoint(R.x - 5, R.y - 5), cvPoint(R.x + R.width + 5, R.y + R.height + 5), CV_RGB(255, 0, 0));
-            
         }
         
     }
@@ -45,7 +44,6 @@ void Elem_trimming::get_elem(IplImage *src_img){
     cv_Labelling(&contours, frame);
     if (contours != NULL){
         DrawNextContour(contours, 1);
-        cvShowImage("elem", frame);
-        cvShowImage("elem_gray", gray_img);
+
     }
 }

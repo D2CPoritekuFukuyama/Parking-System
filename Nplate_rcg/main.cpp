@@ -7,9 +7,9 @@
 #include "stdio.h"
 #include <opencv/cv.hpp>
 #include <opencv/highgui.h>
-#include "labeling.hpp"
+#include "Elem_trimming.hpp"
 #include "Nplate_trim.hpp"
-#include "trimming.hpp"
+
 
 #define VISUAL
 //#define DEBUG_LABELING
@@ -17,29 +17,32 @@ using namespace cv;
 
 int main (int argc, char **argv)
 {
-    string result;
-    Trimming trimming = Trimming(); //ナンバープレート検出のクラス
-
+    Nplate_trim nplate_trim = Nplate_trim(); //ナンバープレート検出のクラス
+    Elem_trimming elem_trimming = Elem_trimming();
+    
+    if(nplate_trim.videoCapture  == NULL )
+        return -1;
+    
     //webカメラ用window生成
 #ifdef VISUAL
     cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
 #endif
-    
     while (1) {
-
-
-        if(trimming.get_plateData() == -1)
-            return 0;
+        nplate_trim.frame = cvQueryFrame(nplate_trim.videoCapture);
+        cvShowImage("webCamera", nplate_trim.frame);
+        if (nplate_trim.get_Nplate() == 0 && nplate_trim.nplate_down != NULL){
+#ifndef DEGUB_LABELING
+            elem_trimming.get_elem(nplate_trim.result_img);
+            cvShowImage("elem", elem_trimming.frame);
+            cvShowImage("elem_gray", elem_trimming.gray_img);
+#endif
+        }
 #ifdef DEBUG_LABELING
         if (cvWaitKey(1) == 0x71) {
             break;
         }
 #endif
-#if !defined DEBUG_LABELING
-            //locationのゼロクリア
-#endif
-        
-        
+
     }
 
     //cvReleaseCapture(&labeling.videoCapture);
