@@ -21,6 +21,7 @@ Nplate_trim::Nplate_trim(){
     
     gray_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
     bin_img = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
+	result_img = NULL;
     contours = NULL;
 }
 
@@ -114,7 +115,7 @@ void Nplate_trim::trimming(IplImage *src_img){
     Ptr<IplImage> gray_src = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
     cvCvtColor(src_img, gray_src, CV_RGB2GRAY);
     result_img = cvCreateImage(cvSize(300, 150), IPL_DEPTH_8U, 1);
-    
+    std::cout << "get result_img" <<std::endl; 
     cvResize(gray_src, result_img);
     contrast_correct(result_img);
     

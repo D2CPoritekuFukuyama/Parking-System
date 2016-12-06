@@ -14,29 +14,33 @@
 #define VISUAL
 //#define DEBUG_LABELING
 using namespace cv;
+using namespace std;
 
 int main (int argc, char **argv)
 {
     Nplate_trim nplate_trim = Nplate_trim(); //ナンバープレート検出のクラス
     Elem_trimming elem_trimming = Elem_trimming();
-    
     if(nplate_trim.videoCapture  == NULL )
         return -1;
     
     //webカメラ用window生成
 #ifdef VISUAL
     cvNamedWindow("webCamera", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow("elem", CV_WINDOW_AUTOSIZE);
+    cvNamedWindow("elem_gray", CV_WINDOW_AUTOSIZE);
 #endif
     while (1) {
         nplate_trim.frame = cvQueryFrame(nplate_trim.videoCapture);
         cvShowImage("webCamera", nplate_trim.frame);
-        if (nplate_trim.get_Nplate() == 0 && nplate_trim.nplate_down != NULL){
-#ifndef DEGUB_LABELING
+        if (nplate_trim.get_Nplate() == 0){
+			if(nplate_trim.result_img != NULL){
+#ifndef DEBUG_LABELING 
             elem_trimming.get_elem(nplate_trim.result_img);
             cvShowImage("elem", elem_trimming.frame);
             cvShowImage("elem_gray", elem_trimming.gray_img);
-#endif
-        }
+#endif			
+     		}
+		}
 #ifdef DEBUG_LABELING
         if (cvWaitKey(1) == 0x71) {
             break;
