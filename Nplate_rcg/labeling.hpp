@@ -11,8 +11,9 @@
 #pragma once
 
 #include <stdio.h>
-#include "cv.h"
-#include "highgui.h"
+#include <opencv/cxcore.hpp>
+#include <opencv/cv.hpp>
+#include <opencv2/highgui.hpp>
 
 #endif /* labeling_hpp */
 

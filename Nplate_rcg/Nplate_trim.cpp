@@ -70,7 +70,7 @@ void Nplate_trim::draw_poly(CvSeq *approx){
         pts[0][i] = *(CvPoint*)cvGetSeqElem(approx, i);
     }
     cvPolyLine(frame, pts, npts, 1, true, CV_RGB(255, 0, 0),4);
-    //cvShowImage("drawPoly", frame);
+    cvShowImage("drawPoly", frame);
 }
 
 void Nplate_trim::DrawNextContour(

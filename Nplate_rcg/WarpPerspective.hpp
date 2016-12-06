@@ -10,8 +10,8 @@
 #define WarpPerspective_hpp
 
 #include <stdio.h>
-#include "cv.h"
-#include "highgui.h"
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 class WarpPerspective{
 private:

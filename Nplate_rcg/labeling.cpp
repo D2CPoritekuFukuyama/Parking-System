@@ -7,7 +7,6 @@
 //
 
 #include "labeling.hpp"
-#include "cxcore.h"
 #include "WarpPerspective.hpp"
 #include <math.h>
 
@@ -21,11 +20,13 @@ using namespace cv;
 void Labeling::cv_Labelling(CvSeq **contours, IplImage *src_img){
     int contour_count;
     CvMemStorage *storage = cvCreateMemStorage(0);
+    //Nplate_trim用
     if (src_img -> nChannels != 1) {
         cvCvtColor(src_img, gray_img, CV_RGB2GRAY);
+        Binarization();
+        cvShowImage("src_bin", bin_img);
     }
     
-    Binarization();
     if(bin_img == NULL)
         return;
     //輪郭抽出

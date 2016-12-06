@@ -12,7 +12,7 @@
 #include "trimming.hpp"
 
 #define VISUAL
-#define DEBUG_LABELING
+//#define DEBUG_LABELING
 using namespace cv;
 
 int main (int argc, char **argv)
@@ -35,13 +35,6 @@ int main (int argc, char **argv)
         }
 #endif
 #if !defined DEBUG_LABELING
-            if (nplate_trim.result_img != NULL){
-                cvSaveImage("image/test/Nplate.jpg", nplate_trim.result_img);
-                cvReleaseCapture(&nplate_trim.videoCapture);
-                cvDestroyAllWindows();
-                break;
-            }
-            
             //locationのゼロクリア
 #endif
         

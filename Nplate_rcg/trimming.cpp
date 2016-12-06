@@ -18,7 +18,7 @@ int Trimming::get_plateData(){
     if(nplate_trim.videoCapture  == NULL )
         return -1;
     
-    //cvShowImage("webCamera", nplate_trim.frame);
+    cvShowImage("webCamera", nplate_trim.frame);
     if (nplate_trim.get_Nplate() != 0 || nplate_trim.result_img == NULL)
         return -1;
     //cvShowImage("nplate_down", nplate_trim.result_img);
