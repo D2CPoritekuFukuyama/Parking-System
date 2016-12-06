@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <opencv/cxcore.hpp>
 #include <opencv/cv.hpp>
-#include <opencv2/highgui.hpp>
+#include <opencv/highgui.h>
 
 #endif /* labeling_hpp */
 

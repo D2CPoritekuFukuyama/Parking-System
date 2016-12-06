@@ -5,8 +5,8 @@
 //  Created by 石川諒 on 2016/10/01.
 //  Copyright © 2016年 石川諒. All rights reserved.
 #include "stdio.h"
-#include "cv.h"
-#include "highgui.h"
+#include <opencv/cv.hpp>
+#include <opencv/highgui.h>
 #include "labeling.hpp"
 #include "Nplate_trim.hpp"
 #include "trimming.hpp"
