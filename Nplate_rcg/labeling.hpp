@@ -35,7 +35,6 @@ public:
     IplImage *bin_img;//2値化画像
     IplImage *result_img;//ラベリング結果
     cv::Mat Nplate_point;
-    CvCapture *videoCapture;
     
     
     

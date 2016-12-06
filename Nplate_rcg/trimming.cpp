@@ -17,8 +17,8 @@ int Trimming::get_plateData(){
     nplate_trim.frame = cvQueryFrame(nplate_trim.videoCapture);
     if(nplate_trim.videoCapture  == NULL )
         return -1;
-    
     cvShowImage("webCamera", nplate_trim.frame);
+    
     if (nplate_trim.get_Nplate() != 0 || nplate_trim.result_img == NULL)
         return -1;
     //cvShowImage("nplate_down", nplate_trim.result_img);
@@ -26,6 +26,6 @@ int Trimming::get_plateData(){
     
     elem_trimming.get_elem(nplate_trim.result_img);
 #endif
-    nplate_trim.frame = cvQueryFrame(nplate_trim.videoCapture);
+    //nplate_trim.frame = cvQueryFrame(nplate_trim.videoCapture);
     return 0;
 }

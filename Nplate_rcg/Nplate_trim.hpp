@@ -27,6 +27,7 @@ private:
     void contrast_correct(Mat img);
     
 public:
+    CvCapture *videoCapture;
     IplImage *nplate_up;
     IplImage *nplate_down;
     Nplate_trim();

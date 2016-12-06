@@ -28,7 +28,8 @@ int main (int argc, char **argv)
     while (1) {
 
 
-        trimming.get_plateData();
+        if(trimming.get_plateData() == -1)
+            return 0;
 #ifdef DEBUG_LABELING
         if (cvWaitKey(1) == 0x71) {
             break;

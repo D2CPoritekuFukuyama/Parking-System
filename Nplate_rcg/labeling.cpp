@@ -18,7 +18,6 @@ using namespace cv;
 
 //ラベリング関数
 void Labeling::cv_Labelling(CvSeq **contours, IplImage *src_img){
-    int contour_count;
     CvMemStorage *storage = cvCreateMemStorage(0);
     //Nplate_trim用
     if (src_img -> nChannels != 1) {
@@ -30,7 +29,7 @@ void Labeling::cv_Labelling(CvSeq **contours, IplImage *src_img){
     if(bin_img == NULL)
         return;
     //輪郭抽出
-    contour_count = cvFindContours(bin_img,
+    cvFindContours(bin_img,
                    storage,
                    contours,
                    sizeof(CvContour),
