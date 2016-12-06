@@ -32,12 +32,13 @@ int main (int argc, char **argv)
     while (1) {
         nplate_trim.frame = cvQueryFrame(nplate_trim.videoCapture);
         cvShowImage("webCamera", nplate_trim.frame);
+		waitKey(1);
         if (nplate_trim.get_Nplate() == 0){
 			if(nplate_trim.result_img != NULL){
 #ifndef DEBUG_LABELING 
     	        elem_trimming.get_elem(nplate_trim.result_img);
-    	        //cvShowImage("elem", elem_trimming.frame);
-        	    //cvShowImage("elem_gray", elem_trimming.gray_img);
+    	        cvShowImage("elem", elem_trimming.frame);
+        	    cvShowImage("elem_gray", elem_trimming.gray_img);
 #endif			
      		}
 		}
