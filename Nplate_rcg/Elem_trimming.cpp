@@ -8,9 +8,10 @@
 
 #include "Elem_trimming.hpp"
 #include "WarpPerspective.hpp"
+#include <fstream>
 
 using namespace cv;
-
+using namespace std;
 
 
 void Elem_trimming::DrawNextContour(
@@ -21,17 +22,33 @@ void Elem_trimming::DrawNextContour(
         double Area = fabs(cvContourArea(Contour, CV_WHOLE_SEQ));
         if (Area >= 300) {
             CvRect R = cvBoundingRect(Contour,0);
-            cvSetImageROI(frame, cvRect(R.x - 5, R.y - 5, R.width + 10, R.height + 10));
-            cvSaveImage("image/test/trim.jpg", frame);
+            cvSetImageROI(frame, cvRect(R.x, R.y, R.width, R.height));
+            trimming(frame);
             cvResetImageROI(frame);
-            //cvRectangle(frame, cvPoint(R.x - 5, R.y - 5), cvPoint(R.x + R.width + 5, R.y + R.height + 5), CV_RGB(255, 0, 0));
+            
         }
         
     }
 }
 
 void Elem_trimming::trimming(IplImage *src_img){
-    
+    Mat src_mat = src_img;
+    Mat canvas = Mat::ones(28, 28, CV_8U)*255;
+    resize(src_mat, src_mat, Size(), (15.0 / src_mat.cols), (15.0 / src_mat.rows) );
+    for (int row = 0; row < 15; row++) {
+        for (int col = 0 ; col < 15; col ++) {
+            canvas.at<unsigned char>(row+6,col+6) = src_mat.at<unsigned char>(row, col);
+        }
+    }
+    cout << canvas << endl;
+    imwrite("image/test/trim.jpg", canvas);
+    src_mat = src_mat.reshape(0, 1); //1行784列に変換
+    cout<< format(src_img,"csv") << endl;
+    std::string filename = "Dataset/test.csv";//出力用
+    std::ofstream writing_file;//出力用
+    writing_file.open(filename, std::ios::out);
+    writing_file << cv::format(src_mat,"csv") << ", ";
+    writing_file << "17"<< std::endl;
 }
 
 void Elem_trimming::get_elem(IplImage *src_img){
