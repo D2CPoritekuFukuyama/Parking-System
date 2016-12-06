@@ -11,7 +11,7 @@
 #include "Nplate_trim.hpp"
 
 
-#define VISUAL
+//#define VISUAL
 //#define DEBUG_LABELING
 using namespace cv;
 using namespace std;
@@ -35,9 +35,9 @@ int main (int argc, char **argv)
         if (nplate_trim.get_Nplate() == 0){
 			if(nplate_trim.result_img != NULL){
 #ifndef DEBUG_LABELING 
-            elem_trimming.get_elem(nplate_trim.result_img);
-            cvShowImage("elem", elem_trimming.frame);
-            cvShowImage("elem_gray", elem_trimming.gray_img);
+    	        elem_trimming.get_elem(nplate_trim.result_img);
+    	        //cvShowImage("elem", elem_trimming.frame);
+        	    //cvShowImage("elem_gray", elem_trimming.gray_img);
 #endif			
      		}
 		}
