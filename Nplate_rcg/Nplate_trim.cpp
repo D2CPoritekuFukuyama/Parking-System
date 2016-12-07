@@ -101,7 +101,7 @@ void Nplate_trim::DrawNextContour(
 
 void Nplate_trim::contrast_correct(Mat img){
     // ルックアップテーブル作成
-    float a = 20.0; // 入力パラメータ
+    float a = 2.0; // 入力パラメータ
     uchar lut[256];
     for (int i = 0; i < 256; i++)
         lut[i] = 255.0 / (1+exp(-a*(i-128)/255));
@@ -136,6 +136,7 @@ void Nplate_trim::trimming(IplImage *src_img){
 }
 
 int Nplate_trim::get_Nplate(){
+    //contrast_correct(frame);
     cv_Labelling(&contours, frame);
     if (contours != NULL){
         DrawNextContour(contours, 1);
