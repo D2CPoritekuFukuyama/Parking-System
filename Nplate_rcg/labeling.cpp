@@ -43,7 +43,7 @@ void Labeling::cv_Labelling(CvSeq **contours, IplImage *src_img){
 void Labeling::Binarization(){
     Ptr<IplImage> bin_img1 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
     Ptr<IplImage> bin_img2 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
-    cvThreshold(gray_img, bin_img1, 200, 255, CV_THRESH_BINARY); //閾値165で2値化
+    cvThreshold(gray_img, bin_img1, 165, 255, CV_THRESH_BINARY); //閾値165で2値化
     //適応的閾値処理
     cvAdaptiveThreshold(gray_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
     cvAnd(bin_img1, bin_img2, bin_img); //二つの２値化画像の論理積

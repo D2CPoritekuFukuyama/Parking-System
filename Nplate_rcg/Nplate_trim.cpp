@@ -49,7 +49,6 @@ bool Nplate_trim::check_rectangle(CvSeq *Nplate_seq){
     
     
     //角度でフィルタリング
-    std::cout << angle1.at<double>(0) << " "<< angle2.at<double>(0) << std::endl;
     if(angle2.at<double>(0) - angle1.at<double>(0) < 10){
         if (abs(diffe[0].x - (2*diffe[0].y)) < 100) {
             if (abs(diffe[1].x - (2*diffe[1].y)) < 100) {
@@ -101,7 +100,7 @@ void Nplate_trim::DrawNextContour(
 
 void Nplate_trim::contrast_correct(Mat img){
     // ルックアップテーブル作成
-    float a = 2.0; // 入力パラメータ
+    float a = 5.0; // 入力パラメータ
     uchar lut[256];
     for (int i = 0; i < 256; i++)
         lut[i] = 255.0 / (1+exp(-a*(i-128)/255));
@@ -115,17 +114,17 @@ void Nplate_trim::trimming(IplImage *src_img){
     Ptr<IplImage> gray_src = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
     cvCvtColor(src_img, gray_src, CV_RGB2GRAY);
     result_img = cvCreateImage(cvSize(300, 150), IPL_DEPTH_8U, 1);
-    std::cout << "get result_img" <<std::endl; 
     cvResize(gray_src, result_img);
     contrast_correct(result_img);
     
-    cvSetImageROI(result_img, Rect(65,0,180, 55));
-    nplate_down = cvCloneImage(result_img);
-    cvSaveImage("image/test/Nplate-down.jpg", result_img);
+    cvSetImageROI(result_img, Rect(0,0,150, 55));
+    cvSaveImage("Dataset/Location.jpg", result_img);
+    cvSetZero(result_img);
+    nplate_up = cvCloneImage(result_img);
     cvResetImageROI(result_img);
     cvSetImageROI(result_img, Rect(Rect(10,50,285,100)));
-    nplate_up = cvCloneImage(result_img);
-    cvSaveImage("image/test/Nplate.jpg", result_img);
+    nplate_down = cvCloneImage(result_img);
+    cvSaveImage("image/test/Nplate_down.jpg", result_img);
     cvResetImageROI(result_img);
     
     /*imshow("Nplate-up", Nplate_up);
