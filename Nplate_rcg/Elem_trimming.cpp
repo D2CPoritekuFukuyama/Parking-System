@@ -105,5 +105,6 @@ int Elem_trimming::get_elem(IplImage *src_img){
         DrawNextContour(contours, 1);
         return 0;
     }
-    return -1;    
+    return -1;
+    
 }

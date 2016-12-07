@@ -100,7 +100,7 @@ void Nplate_trim::DrawNextContour(
 
 void Nplate_trim::contrast_correct(Mat img){
     // ルックアップテーブル作成
-    float a = 5.0; // 入力パラメータ
+    float a = 3.0; // 入力パラメータ
     uchar lut[256];
     for (int i = 0; i < 256; i++)
         lut[i] = 255.0 / (1+exp(-a*(i-128)/255));
@@ -111,14 +111,22 @@ void Nplate_trim::contrast_correct(Mat img){
 //トリミング関数
 //ラベリング時に取得したナンバープレートの点列を用いてトリミング
 void Nplate_trim::trimming(IplImage *src_img){
-    Ptr<IplImage> gray_src = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
-    cvCvtColor(src_img, gray_src, CV_RGB2GRAY);
+    Ptr<IplImage> location_ipl = cvCreateImage(cvSize(300, 150), IPL_DEPTH_8U, 3);
+    Ptr<IplImage> gray_src1 = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
+    Ptr<IplImage> gray_src2 = cvCreateImage(cvGetSize(src_img), IPL_DEPTH_8U, 1);
+    cvCvtColor(src_img, gray_src1, CV_RGB2GRAY);
+    cv_ColorExtraction(src_img, gray_src2, CV_BGR2HSV, 15, 35, 100, 255, 100, 255);
+    cvAdd(gray_src1, gray_src2, gray_img);
     result_img = cvCreateImage(cvSize(300, 150), IPL_DEPTH_8U, 1);
-    cvResize(gray_src, result_img);
+    cvResize(src_img, location_ipl);
+    cvResize(gray_img, result_img);
     contrast_correct(result_img);
     
+    cvSetImageROI(location_ipl, Rect(0,0,155, 55));
+    cvSaveImage("Dataset/Location.jpg", location_ipl);
+    
     cvSetImageROI(result_img, Rect(0,0,150, 55));
-    cvSaveImage("Dataset/Location.jpg", result_img);
+    //cvSaveImage("Dataset/Location.jpg", result_img);
     cvSetZero(result_img);
     nplate_up = cvCloneImage(result_img);
     cvResetImageROI(result_img);

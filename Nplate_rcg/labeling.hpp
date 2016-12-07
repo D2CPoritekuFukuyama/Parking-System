@@ -27,6 +27,12 @@ protected:
     void Binarization();
     virtual void trimming(IplImage *src_img)=0;
     void cv_Labelling(CvSeq **contours, IplImage *src_img);
+    void cv_ColorExtraction(IplImage* src_img, IplImage* dst_img,
+                            int code,
+                            int ch1_lower, int ch1_upper,
+                            int ch2_lower, int ch2_upper,
+                            int ch3_lower, int ch3_upper
+                            );
 private:
     void contrast_correct(cv::Mat img);
 public:
