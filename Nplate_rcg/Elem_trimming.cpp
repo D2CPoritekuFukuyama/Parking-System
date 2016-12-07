@@ -94,7 +94,7 @@ void Elem_trimming::output_to_csv(int count, Mat src_mat){
     writing_file << "17"<< std::endl;
 }
 
-void Elem_trimming::get_elem(IplImage *src_img){
+int Elem_trimming::get_elem(IplImage *src_img){
     frame = cvCloneImage(src_img);
     gray_img = cvCloneImage(frame);
     cvNot(gray_img, gray_img);
@@ -103,5 +103,7 @@ void Elem_trimming::get_elem(IplImage *src_img){
     cv_Labelling(&contours, frame);
     if (contours != NULL){
         DrawNextContour(contours, 1);
+        return 0;
     }
+    return -1;    
 }
