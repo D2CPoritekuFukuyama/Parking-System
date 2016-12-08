@@ -43,14 +43,14 @@ void Labeling::cv_Labelling(CvSeq **contours, IplImage *src_img){
 void Labeling::Binarization(){
     Ptr<IplImage> bin_img1 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
     Ptr<IplImage> bin_img2 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
-    Ptr<IplImage> bin_img3 = cvCreateImage(cvGetSize(gray_img), IPL_DEPTH_8U, 1);
-    cvThreshold(gray_img, bin_img1, 165, 255, CV_THRESH_BINARY); //閾値165で2値化
     //黄色を2値化で白へ
-    cv_ColorExtraction(frame, bin_img3, CV_BGR2HSV, 15, 35, 100, 255, 100, 255);
+    cv_ColorExtraction(frame, bin_img1, CV_BGR2HSV, 15, 35, 100, 255, 100, 255);
+    cv_ColorExtraction(frame, bin_img2, CV_BGR2HSV, 0, 180, 0, 50, 70, 255);
+	cvShowImage("bin_4 test", bin_img2);
     //適応的閾値処理
-    cvAdaptiveThreshold(gray_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
-    cvAnd(bin_img1, bin_img2, bin_img); //二つの２値化画像の論理積
-    cvAdd(bin_img, bin_img3, bin_img);
+//    cvAdaptiveThreshold(gray_img, bin_img2, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY);
+//    cvAnd(bin_img1, bin_img2, bin_img); //二つの２値化画像の論理積
+    cvAdd(bin_img1, bin_img2, bin_img);
     //cvShowImage("bin", bin_img);
     //cvShowImage("bin1", bin_img1);
     //cvShowImage("bin2", bin_img2);
