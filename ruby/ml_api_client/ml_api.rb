@@ -49,31 +49,35 @@ class ML_api_client < Http_Manager
     def get_data 
         hiragana_params = Array.new
         number_params = Array.new
-        hiragana_params.push(set_value('num_test2.csv'))
-        hiragana_params.push(Array.new(785,"0"))
-        number_params.push(set_value('num_test2.csv'))
-        number_params.push(set_value('num_test4.csv'))
-        number_params.push(set_value('num_test4.csv'))
-        p number_params
+		category_params = Array.new
+		4.times do |count|			
+        	number_params.push(set_value("../Dataset/Number#{(count+1).to_s}.csv"))
+		end
+       hiragana_params.push(set_value('../Dataset/Hiragana.csv'))
+       hiragana_params.push(Array.new(785,"0"))
+       category_params.push(set_value('../Dataset/Category_number1.csv'))
+        category_params.push(set_value('../Dataset/Category_number2.csv'))
+        category_params.push(set_value('../Dataset/Category_number3.csv'))
+        #p number_params
         @body = {            
             "Inputs" => {
-                "Hiragana" => {
-                    "ColumnNames" => @colName,
-                    "Values" => hiragana_params,
-                },
-                "Number" =>{
+                "Number" => {
                     "ColumnNames" => @colName,
                     "Values" => number_params,
                 },
-                "Category_Number"=>{
+                "Category_Number" =>{
                     "ColumnNames" => @colName,
-                    "Values"=> number_params,
+                    "Values" => category_params,
+                },
+                "Hiragana"=>{
+                    "ColumnNames" => @colName,
+                    "Values"=> hiragana_params,
                 },
             },
             "GlobalParameters" => Hash.new(),
         }  
         @request.body = @body.to_json
-        #puts @body.to_json
+#        puts @body.to_json
         @response = Net::HTTP.start(@uri.host,
                                    @uri.port, 
                                    :use_ssl => @uri.scheme =='https'

@@ -16,13 +16,11 @@ class Nplate_RCG
 
     def fetch_car_number
         begin
-            stdin, stdout, stderr = Open3.capture3('../openCVtest1/main')
+            stdin, stdout, stderr = Open3.capture3('../Nplate_rcg/main')
         rescue => ex
             p stderr
             p ex
         end
-        stdArray = stdin.split("\n")
-        @nPlate = stdArray[0].split(" ")
     end
     private :fetch_car_number
 
@@ -42,9 +40,8 @@ class Nplate_RCG
     def get_NumberPlate
         fetch_car_number
         fetch_area_name
+		puts @area
         if (nPlate[2] != 0 && area != nil)
-            #puts nPlate
-            #puts area
             result = @memberDAO.get_member(nPlate[1], nPlate[2], nPlate[0], area)
             if result.count == 1 
                 @is_member = 1

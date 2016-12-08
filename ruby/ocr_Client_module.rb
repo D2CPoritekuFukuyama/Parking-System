@@ -3,7 +3,7 @@ module OCR_Recognize
 #require 'net/http'
     def get_AreaName()
         uri = URI('https://api.projectoxford.ai/vision/v1.0/ocr')
-        image = File.open('image/Nplate-up1.jpg')
+        image = File.open('Dataset/Location.jpg')
         uri.query = URI.encode_www_form({
             # Request parameters
             'language' => 'ja',
