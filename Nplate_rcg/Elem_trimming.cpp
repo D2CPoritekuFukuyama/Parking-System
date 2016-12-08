@@ -5,7 +5,7 @@
 //  Created by 石川諒 on 2016/12/04.
 //  Copyright © 2016年 石川諒. All rights reserved.
 //
-
+#include <iostream>
 #include "Elem_trimming.hpp"
 #include "WarpPerspective.hpp"
 #include <fstream>
@@ -53,7 +53,7 @@ void Elem_trimming::trimming(IplImage *src_img){
     }
     threshold(param_mat, param_mat, 90, 255, THRESH_BINARY);
     imwrite("image/test/trim.jpg", param_mat);
-    param_mat = param_mat.reshape(0, 1); //1行784列に変換
+    param_mat = param_mat.reshape(0, 784); //1行784列に変換
 }
 
 void Elem_trimming::output_to_csv(int count, Mat src_mat){
@@ -86,11 +86,10 @@ void Elem_trimming::output_to_csv(int count, Mat src_mat){
         default:
             return;
     }
-    
     ofstream writing_file;//出力用
-    writing_file.open(ss.str(), std::ios::out);
+    writing_file.open(ss.str().c_str(), std::ios::out);
     writing_file << cv::format(src_mat,"csv") << ", ";
-    writing_file << "17"<< std::endl;
+    writing_file << "1"<< std::endl;
 }
 
 int Elem_trimming::get_elem(IplImage *src_img){
