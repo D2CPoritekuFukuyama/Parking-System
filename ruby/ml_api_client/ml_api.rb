@@ -1,7 +1,7 @@
 require 'csv'
 require 'json'
 require 'net/http'
-require "./Http_Manager.rb"
+require "./ml_api_client/Http_Manager.rb"
 require 'json'
 
 
@@ -20,7 +20,7 @@ class ML_api_client < Http_Manager
 
     def initialize(url, api_key)
         @hiragana_list = Array.new
-        File.foreach('hiragana_list.txt') do |str|            
+        File.foreach('ml_api_client/hiragana_list.txt') do |str|            
             @hiragana_list.push(str)
         end
 
@@ -52,13 +52,13 @@ class ML_api_client < Http_Manager
         number_params = Array.new
 		category_params = Array.new
 		4.times do |count|			
-        	number_params.push(set_value("../Dataset/Number#{(count+1).to_s}.csv"))
+        	number_params.push(set_value("Dataset/Number#{(count+1).to_s}.csv"))
 		end
-       hiragana_params.push(set_value('../Dataset/Hiragana.csv'))
+       hiragana_params.push(set_value('Dataset/Hiragana.csv'))
        hiragana_params.push(Array.new(785,"0"))
-       category_params.push(set_value('../Dataset/Category_number1.csv'))
-        category_params.push(set_value('../Dataset/Category_number2.csv'))
-        category_params.push(set_value('../Dataset/Category_number3.csv'))
+       category_params.push(set_value('Dataset/Category_number1.csv'))
+        category_params.push(set_value('Dataset/Category_number2.csv'))
+        category_params.push(set_value('Dataset/Category_number3.csv'))
         #p number_params
         @body = {            
             "Inputs" => {
@@ -88,7 +88,8 @@ class ML_api_client < Http_Manager
         json = @response.body
         results = JSON.parse(json)
         puts results
-        #result = results['Results']['output1']['value']['Values'][0]
+		File.unlink("Dataset/Category_number1.csv")
+        result = results['Results']['output1']['value']['Values'][0]
         #@hiragana_list[result[0].to_i]
     end
 end

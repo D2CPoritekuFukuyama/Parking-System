@@ -98,7 +98,7 @@ int Elem_trimming::get_elem(IplImage *src_img){
     cvNot(gray_img, gray_img);
     bin_img = cvCloneImage(gray_img);
     cvShowImage("elem_frame", frame);
-    cvThreshold(gray_img, bin_img, 165, 255, CV_THRESH_BINARY);
+    cvThreshold(gray_img, bin_img, 110, 255, CV_THRESH_BINARY);
     cvShowImage("elem inv", bin_img);
     cv_Labelling(&contours, frame);
     if (contours != NULL){

@@ -2,6 +2,7 @@ require "open3"
 require "./ocr_Client_module.rb"
 require "json"
 require "./DAO/azure_MemberDAO.rb"
+require "./ml_api_client/ml_api.rb"
 include OCR_Recognize 
 
 class Nplate_RCG
@@ -17,6 +18,9 @@ class Nplate_RCG
     def fetch_car_number
         begin
             stdin, stdout, stderr = Open3.capture3('../Nplate_rcg/main')
+			#画像処理後Datasetのcsvファイルパラメートとしてml_apiへ投げる
+			hiragana_api_client = ML_api_client.new('https://ussouthcentral.services.azureml.net/workspaces/17636602cf21485babb5f60e96be7642/services/c6e321b758e8497c94c5a6289da5a3bf/execute?api-version=2.0&details=true','HIRAGANA_ML_API_KEY' )
+			results = hiragana_api_client.get_data
         rescue => ex
             p stderr
             p ex
