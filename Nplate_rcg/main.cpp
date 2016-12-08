@@ -12,8 +12,8 @@
 #include "Nplate_trim.hpp"
 
 
-#define VISUAL
-#define DEBUG_LABELING
+//#define VISUAL
+//#define DEBUG_LABELING
 using namespace cv;
 using namespace std;
 
@@ -47,6 +47,7 @@ int main (int argc, char **argv)
 		}
         if(stat(file, &st) == 0)
             break;
+            //cout << "トリミング成功" << endl;
         else{
             cout << "トリミング失敗" << endl;
         }

@@ -23,6 +23,7 @@ private:
     CvSeq *contours;
     void trimming(IplImage *src_img);
     void output_to_csv(int count, Mat src_mat);
+    void save_param_img(int count);
 public:
     int get_elem(IplImage *src_img);
     Mat param_mat;

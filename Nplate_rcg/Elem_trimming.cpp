@@ -28,11 +28,15 @@ void Elem_trimming::DrawNextContour(
                 count ++;
             }else{
                 trimming(frame);
+                save_param_img(count);
+                param_mat = param_mat.reshape(0, 784); //1行784列に変換
                 output_to_csv(count, param_mat);
                 count ++;
             }
         }else if(Area >= 1000){
             trimming(frame);
+            save_param_img(count);
+            param_mat = param_mat.reshape(0, 784); //1行784列に変換
             output_to_csv(count, param_mat);
             count ++;
         }
@@ -51,9 +55,14 @@ void Elem_trimming::trimming(IplImage *src_img){
             param_mat.at<unsigned char>(row+6,col+8) = src_mat.at<unsigned char>(row, col);
         }
     }
+
+}
+
+void Elem_trimming::save_param_img(int count){
+    stringstream ss;
+    ss << "image/test/" << count << ".jpg";
     threshold(param_mat, param_mat, 90, 255, THRESH_BINARY);
-    imwrite("image/test/trim.jpg", param_mat);
-    param_mat = param_mat.reshape(0, 784); //1行784列に変換
+    imwrite(ss.str().c_str(), param_mat);
 }
 
 void Elem_trimming::output_to_csv(int count, Mat src_mat){
