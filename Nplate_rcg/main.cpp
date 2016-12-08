@@ -38,8 +38,8 @@ int main (int argc, char **argv)
         if (nplate_trim.get_Nplate() == 0){
 			if(nplate_trim.result_img != NULL){
 #ifndef DEBUG_LABELING 
-    	        if (elem_trimming.get_elem(nplate_trim.result_img) == 0)
-                    return 0;
+                elem_trimming.get_elem(nplate_trim.result_img);
+                    
 //    	        cvShowImage("elem", elem_trimming.frame);
 //        	    cvShowImage("elem_gray", elem_trimming.gray_img);
 #endif			
@@ -47,8 +47,9 @@ int main (int argc, char **argv)
 		}
         if(stat(file, &st) == 0)
             break;
-        else
+        else{
             cout << "トリミング失敗" << endl;
+        }
         if (cvWaitKey(1) == 0x71) {
             break;
         }
