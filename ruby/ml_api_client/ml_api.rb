@@ -87,12 +87,12 @@ class ML_api_client < Http_Manager
         end
         json = @response.body
         results = JSON.parse(json)
-        puts results
+#        puts results
 		File.unlink("Dataset/Category_number1.csv")
-        result = results['Results']['output1']['value']['Values'][0]
-        #@hiragana_list[result[0].to_i]
+        result = results['Results']
+#        @hiragana_list[result[0].to_i]
     end
 end
 
 #hiragana_api_client = ML_api_client.new('https://ussouthcentral.services.azureml.net/workspaces/17636602cf21485babb5f60e96be7642/services/c6e321b758e8497c94c5a6289da5a3bf/execute?api-version=2.0&details=true','HIRAGANA_ML_API_KEY' )
-#hiragana_api_client.get_data
+#puts hiragana_api_client.get_data["Number"]["value"]["Values"]

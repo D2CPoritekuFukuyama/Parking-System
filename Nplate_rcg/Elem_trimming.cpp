@@ -61,7 +61,7 @@ void Elem_trimming::trimming(IplImage *src_img){
 void Elem_trimming::save_param_img(int count){
     stringstream ss;
     ss << "image/test/" << count << ".jpg";
-    threshold(param_mat, param_mat, 90, 255, THRESH_BINARY);
+    threshold(param_mat, param_mat, 165, 255, THRESH_BINARY);
     imwrite(ss.str().c_str(), param_mat);
 }
 
@@ -103,13 +103,14 @@ void Elem_trimming::output_to_csv(int count, Mat src_mat){
 
 int Elem_trimming::get_elem(IplImage *src_img){
     frame = cvCloneImage(src_img);
-    gray_img = cvCloneImage(frame);
-    cvNot(gray_img, gray_img);
-    bin_img = cvCloneImage(gray_img);
-    cvShowImage("elem_frame", frame);
-    cvThreshold(gray_img, bin_img, 110, 255, CV_THRESH_BINARY);
-    cvShowImage("elem inv", bin_img);
-    cv_Labelling(&contours, frame);
+	gray_img = cvCloneImage(frame);
+    //cvNot(gray_img, bin_img);
+    cvShowImage("elem_frame", gray_img);
+    cvThreshold(gray_img, gray_img, 165, 255, CV_THRESH_BINARY_INV);
+	bin_img = cvCloneImage(gray_img);
+    cvShowImage("elem inv", gray_img);
+    cv_Labelling(&contours, gray_img);
+	std::cout << "test" << endl;
     if (contours != NULL){
         DrawNextContour(contours, 1);
         return 0;

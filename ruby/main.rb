@@ -48,7 +48,16 @@ loop do
 		count += 1
         puts nplate_RCG.area
         puts nplate_RCG.is_member
-		ticketing if count > 5 #５回認証失敗で強制印字 
+		if count > 5 #５回認証失敗で強制印字 
+			ticketing
+			Open3.capture3("../motor/gate_open")
+			loop do
+				if io.digital_read(0) == 1 then
+					is_gone = true
+					break
+				end
+			end
+		end
 	elsif(io.digital_read(3) == 0 && is_gone == true)
 		puts "車が出ました"
 		stdin, stdout, stderr,thr_wait = Open3.capture3("../motor/gate_close")
