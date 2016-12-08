@@ -7,6 +7,7 @@
 #include "stdio.h"
 #include <opencv/cv.hpp>
 #include <opencv/highgui.h>
+#include <sys/stat.h>
 #include "Elem_trimming.hpp"
 #include "Nplate_trim.hpp"
 
@@ -18,6 +19,8 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
+    struct stat st;
+    const char* file = "./Dataset/Category_number1.csv";
     Nplate_trim nplate_trim = Nplate_trim(); //ナンバープレート検出のクラス
     Elem_trimming elem_trimming = Elem_trimming();
     if(nplate_trim.videoCapture  == NULL )
@@ -42,6 +45,10 @@ int main (int argc, char **argv)
 #endif			
      		}
 		}
+        if(stat(file, &st) == 0)
+            break;
+        else
+            cout << "トリミング失敗" << endl;
         if (cvWaitKey(1) == 0x71) {
             break;
         }

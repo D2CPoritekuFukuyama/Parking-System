@@ -52,7 +52,6 @@ void Elem_trimming::trimming(IplImage *src_img){
         }
     }
     threshold(param_mat, param_mat, 90, 255, THRESH_BINARY);
-    cout << param_mat << endl;
     imwrite("image/test/trim.jpg", param_mat);
     param_mat = param_mat.reshape(0, 1); //1行784列に変換
 }
