@@ -4,6 +4,7 @@ require 'net/http'
 require "./Http_Manager.rb"
 require 'json'
 
+
 class ML_api_client < Http_Manager
     attr_reader :body
     attr_reader :hiragana_list
