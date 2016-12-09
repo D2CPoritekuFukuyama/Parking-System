@@ -20,7 +20,7 @@ using namespace std;
 int main (int argc, char **argv)
 {
     struct stat st;
-    const char* file = "./Dataset/Category_number1.csv";
+    const char* file = "./Dataset/Number4.csv";
     Nplate_trim nplate_trim = Nplate_trim(); //ナンバープレート検出のクラス
     Elem_trimming elem_trimming = Elem_trimming();
     if(nplate_trim.videoCapture  == NULL )
@@ -38,7 +38,7 @@ int main (int argc, char **argv)
         if (nplate_trim.get_Nplate() == 0){
 			if(nplate_trim.result_img != NULL){
 #ifndef DEBUG_LABELING 
-                elem_trimming.get_elem(nplate_trim.nplate_down);
+                elem_trimming.get_elem(nplate_trim.nplate_down, nplate_trim.nplate_down);
                     
 //    	        cvShowImage("elem", elem_trimming.frame);
 //        	    cvShowImage("elem_gray", elem_trimming.gray_img);
@@ -48,10 +48,10 @@ int main (int argc, char **argv)
         if(stat(file, &st) == 0)
             break;
             //cout << "トリミング成功" << endl;
-        else{
+        else
             cout << "トリミング失敗" << endl;
-        }
-        if (cvWaitKey(1) == 0x71) {
+        
+        if (waitKey(1) == 0x71) {
             break;
         }
 

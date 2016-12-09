@@ -9,6 +9,7 @@
 #include "Elem_trimming.hpp"
 #include "WarpPerspective.hpp"
 #include <fstream>
+#include <sys/stat.h>
 
 using namespace cv;
 using namespace std;
@@ -18,6 +19,7 @@ void Elem_trimming::DrawNextContour(
                 CvSeq *Contour, //輪郭へのポインタ
                 int Level //輪郭のレベル（階層）
 ){
+    number_count = 0;
     int count = 0;
     for (; Contour != 0; Contour = Contour ->h_next) {
         double Area = fabs(cvContourArea(Contour, CV_WHOLE_SEQ));
@@ -27,17 +29,18 @@ void Elem_trimming::DrawNextContour(
             if (count == 0) {
                 count ++;
             }else{
-                trimming(frame);
-                save_param_img(count);
-                param_mat = param_mat.reshape(0, 784); //1行784列に変換
-                output_to_csv(count, param_mat);
+                //trimming(frame);
+                //save_param_img(count);
+                //param_mat = param_mat.reshape(0, 784); //1行784列に変換
+                //output_to_csv2(count, param_mat);
                 count ++;
             }
         }else if(Area >= 1000){
-            trimming(frame);
-            save_param_img(count);
-            param_mat = param_mat.reshape(0, 784); //1行784列に変換
-            output_to_csv(count, param_mat);
+            //trimming(frame);
+            //save_param_img(count);
+            //param_mat = param_mat.reshape(0, 784); //1行784列に変換
+            //output_to_csv2(count, param_mat);
+            number_count ++;
             count ++;
         }
         cvResetImageROI(frame);
@@ -61,7 +64,10 @@ void Elem_trimming::trimming(IplImage *src_img){
 void Elem_trimming::save_param_img(int count){
     stringstream ss;
     ss << "image/test/" << count << ".jpg";
-    threshold(param_mat, param_mat, 100, 255, THRESH_BINARY);
+    if(count != 0)
+        threshold(param_mat, param_mat, 100, 255, THRESH_BINARY);
+    else
+        threshold(param_mat, param_mat, 50, 255, THRESH_BINARY);
     imwrite(ss.str().c_str(), param_mat);
 }
 
@@ -101,41 +107,43 @@ void Elem_trimming::output_to_csv(int count, Mat src_mat){
     writing_file << "1"<< std::endl;
 }
 
-int Elem_trimming::get_elem(IplImage *src_img){
+int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
     int width = 0, count = 0;
-    frame = cvCloneImage(src_img);
+    frame = cvCloneImage(src_img1);
 	gray_img = cvCloneImage(frame);
     //cvNot(gray_img, bin_img);
     cvShowImage("elem_frame", gray_img);
-    cvThreshold(gray_img, gray_img, 165, 255, CV_THRESH_BINARY_INV);
+    cvThreshold(gray_img, gray_img, 100, 255, CV_THRESH_BINARY_INV);
 	bin_img = cvCloneImage(gray_img);
     cvShowImage("elem inv", gray_img);
-    //ひらがなのトリミング
-    cvSetImageROI(frame, Rect(width,55, 30,155));
-    trimming(frame);
-    save_param_img(count);
-    param_mat = param_mat.reshape(0, 784); //1行784列に変換
-    cvResetImageROI(frame);
-    output_to_csv(count, param_mat);
-    //ナンバーのトリミング
-    width = 50;
-    for (count = 1; count <= 4; count++) {
-        if (count == 3)
-            width += 25;
-        cvSetImageROI(frame, Rect(width,55, 60,155));
-        trimming(frame);
-        save_param_img(count);
-        param_mat = param_mat.reshape(0, 784); //1行784列に変換
-        cvResetImageROI(frame);
-        output_to_csv(count, param_mat);
-        width += 55;
-    }
-
-    /*cv_Labelling(&contours, gray_img);
+    cv_Labelling(&contours, gray_img);
     if (contours != NULL){
         DrawNextContour(contours, 1);
+        if(number_count == 4){
+            frame = cvCloneImage(src_img2);
+            //ひらがなのトリミング
+            cvSetImageROI(frame, Rect(width,55, 30,155));
+            trimming(frame);
+            save_param_img(count);
+            param_mat = param_mat.reshape(0, 784); //1行784列に変換
+            cvResetImageROI(frame);
+            output_to_csv(count, param_mat);
+            //ナンバーのトリミング
+            width = 50;
+            for (count = 1; count <= 4; count++) {
+                if (count == 3)
+                    width += 25;
+                cvSetImageROI(frame, Rect(width,55, 60,155));
+                trimming(frame);
+                save_param_img(count);
+                param_mat = param_mat.reshape(0, 784); //1行784列に変換
+                cvResetImageROI(frame);
+                output_to_csv(count, param_mat);
+                width += 55;
+            }
+        }
         return 0;
-    }*/
+    }
     return -1;
     
 }

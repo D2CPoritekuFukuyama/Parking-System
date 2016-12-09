@@ -24,8 +24,9 @@ private:
     void trimming(IplImage *src_img);
     void output_to_csv(int count, Mat src_mat);
     void save_param_img(int count);
+    int number_count;
 public:
-    int get_elem(IplImage *src_img);
+    int get_elem(IplImage *src_img1, IplImage *src_img2);
     Mat param_mat;
 };
 
