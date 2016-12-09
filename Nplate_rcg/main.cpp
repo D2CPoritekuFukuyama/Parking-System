@@ -38,7 +38,7 @@ int main (int argc, char **argv)
         if (nplate_trim.get_Nplate() == 0){
 			if(nplate_trim.result_img != NULL){
 #ifndef DEBUG_LABELING 
-                elem_trimming.get_elem(nplate_trim.result_img);
+                elem_trimming.get_elem(nplate_trim.nplate_down);
                     
 //    	        cvShowImage("elem", elem_trimming.frame);
 //        	    cvShowImage("elem_gray", elem_trimming.gray_img);

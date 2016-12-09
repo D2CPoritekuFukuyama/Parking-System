@@ -61,35 +61,35 @@ void Elem_trimming::trimming(IplImage *src_img){
 void Elem_trimming::save_param_img(int count){
     stringstream ss;
     ss << "image/test/" << count << ".jpg";
-    threshold(param_mat, param_mat, 165, 255, THRESH_BINARY);
+    threshold(param_mat, param_mat, 100, 255, THRESH_BINARY);
     imwrite(ss.str().c_str(), param_mat);
 }
 
 void Elem_trimming::output_to_csv(int count, Mat src_mat){
     stringstream ss;
     switch (count) {
-        case 1:
+        case 0:
             ss << "Dataset/" << "Hiragana" << ".csv";
             break;
+        case 1:
+            ss << "Dataset/" << "Number1" << ".csv";
+            break;
         case 2:
-            ss << "Dataset/" << "Number4" << ".csv";
+            ss << "Dataset/" << "Number2" << ".csv";
             break;
         case 3:
             ss << "Dataset/" << "Number3" << ".csv";
             break;
         case 4:
-            ss << "Dataset/" << "Number2" << ".csv";
+            ss << "Dataset/" << "Number4" << ".csv";
             break;
         case 5:
-            ss << "Dataset/" << "Number1" << ".csv";
-            break;
-        case 6:
             ss << "Dataset/" << "Category_number3" << ".csv";
             break;
-        case 7:
+        case 6:
             ss << "Dataset/" << "Category_number2" << ".csv";
             break;
-        case 8:
+        case 7:
             ss << "Dataset/" << "Category_number1" << ".csv";
             break;
         default:
@@ -102,6 +102,7 @@ void Elem_trimming::output_to_csv(int count, Mat src_mat){
 }
 
 int Elem_trimming::get_elem(IplImage *src_img){
+    int width = 0, count = 0;
     frame = cvCloneImage(src_img);
 	gray_img = cvCloneImage(frame);
     //cvNot(gray_img, bin_img);
@@ -109,12 +110,32 @@ int Elem_trimming::get_elem(IplImage *src_img){
     cvThreshold(gray_img, gray_img, 165, 255, CV_THRESH_BINARY_INV);
 	bin_img = cvCloneImage(gray_img);
     cvShowImage("elem inv", gray_img);
-    cv_Labelling(&contours, gray_img);
-	std::cout << "test" << endl;
+    //ひらがなのトリミング
+    cvSetImageROI(frame, Rect(width,55, 30,155));
+    trimming(frame);
+    save_param_img(count);
+    param_mat = param_mat.reshape(0, 784); //1行784列に変換
+    cvResetImageROI(frame);
+    output_to_csv(count, param_mat);
+    //ナンバーのトリミング
+    width = 50;
+    for (count = 1; count <= 4; count++) {
+        if (count == 3)
+            width += 25;
+        cvSetImageROI(frame, Rect(width,55, 60,155));
+        trimming(frame);
+        save_param_img(count);
+        param_mat = param_mat.reshape(0, 784); //1行784列に変換
+        cvResetImageROI(frame);
+        output_to_csv(count, param_mat);
+        width += 55;
+    }
+
+    /*cv_Labelling(&contours, gray_img);
     if (contours != NULL){
         DrawNextContour(contours, 1);
         return 0;
-    }
+    }*/
     return -1;
     
 }
