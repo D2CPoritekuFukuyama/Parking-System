@@ -64,10 +64,10 @@ void Elem_trimming::trimming(IplImage *src_img){
 void Elem_trimming::save_param_img(int count){
     stringstream ss;
     ss << "image/test/" << count << ".jpg";
-    if(count != 0)
-        threshold(param_mat, param_mat, 100, 255, THRESH_BINARY);
-    else
-        threshold(param_mat, param_mat, 50, 255, THRESH_BINARY);
+//    if(count != 0)
+//        threshold(param_mat, param_mat, 105, 255, THRESH_BINARY);
+//    else
+//       threshold(param_mat, param_mat, 0, 255, THRESH_BINARY);
     imwrite(ss.str().c_str(), param_mat);
 }
 

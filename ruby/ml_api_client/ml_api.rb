@@ -56,9 +56,9 @@ class ML_api_client < Http_Manager
 		end
        hiragana_params.push(set_value('Dataset/Hiragana.csv'))
        hiragana_params.push(Array.new(785,"0"))
-       category_params.push(set_value('Dataset/Category_number1.csv'))
-        category_params.push(set_value('Dataset/Category_number2.csv'))
-        category_params.push(set_value('Dataset/Category_number3.csv'))
+       category_params.push(set_value('Dataset/Number1.csv'))
+       category_params.push(set_value('Dataset/Number2.csv'))
+       category_params.push(set_value('Dataset/Number3.csv'))
         #p number_params
         @body = {            
             "Inputs" => {
@@ -88,7 +88,7 @@ class ML_api_client < Http_Manager
         json = @response.body
         results = JSON.parse(json)
 #        puts results
-		File.unlink("Dataset/Category_number1.csv")
+		File.unlink("Dataset/Number4.csv")
         result = results['Results']
 #        @hiragana_list[result[0].to_i]
     end
