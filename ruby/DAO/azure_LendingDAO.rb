@@ -24,6 +24,7 @@ class Lending_DAO < Azure_DAO
                 0
             )"
         results = @client.execute(sql)
+		puts "登録完了"
     end
 
 	def record_member_leaving(id)

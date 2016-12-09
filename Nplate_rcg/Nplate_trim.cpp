@@ -100,7 +100,7 @@ void Nplate_trim::DrawNextContour(
 
 void Nplate_trim::contrast_correct(Mat img){
     // ルックアップテーブル作成
-    float a = 3.0; // 入力パラメータ
+    float a = 8.0; // 入力パラメータ
     uchar lut[256];
     for (int i = 0; i < 256; i++)
         lut[i] = 255.0 / (1+exp(-a*(i-128)/255));

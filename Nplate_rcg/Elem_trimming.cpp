@@ -51,7 +51,7 @@ void Elem_trimming::trimming(IplImage *src_img){
     Mat src_mat = src_img;
     param_mat = Mat::ones(28, 28, CV_8U)*255;
     double ratio = (double)src_mat.cols / src_mat.rows;
-    resize(src_mat, src_mat, Size(), ratio * (15.0 / src_mat.cols), (15.0 / src_mat.rows) );
+    resize(src_mat, src_mat, Size(), ratio * (18.0 / src_mat.cols), (18.0 / src_mat.rows) );
     //28x28の白背景の画像に,15x15の画像を描画 (padding = 6)
     for (int row = 0; row < src_mat.rows; row++) {
         for (int col = 0 ; col < src_mat.cols; col ++) {
@@ -122,7 +122,7 @@ int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
         if(number_count == 4){
             frame = cvCloneImage(src_img2);
             //ひらがなのトリミング
-            cvSetImageROI(frame, Rect(width,55, 30,155));
+            cvSetImageROI(frame, Rect(width,55, 50,155));
             trimming(frame);
             save_param_img(count);
             param_mat = param_mat.reshape(0, 784); //1行784列に変換
@@ -133,7 +133,7 @@ int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
             for (count = 1; count <= 4; count++) {
                 if (count == 3)
                     width += 25;
-                cvSetImageROI(frame, Rect(width,55, 60,155));
+                cvSetImageROI(frame, Rect(width,55, 60,160));
                 trimming(frame);
                 save_param_img(count);
                 param_mat = param_mat.reshape(0, 784); //1行784列に変換
