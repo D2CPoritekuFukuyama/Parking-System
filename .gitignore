@@ -4,7 +4,7 @@ Nplate_rcg/main
 **/ken.jpg
 **/*Nplate*.jpg
 **/*test*
-./!moter_test
+!motor_test
 **/Number.jpg
 Nplate_rcg/image
 **/*.o
