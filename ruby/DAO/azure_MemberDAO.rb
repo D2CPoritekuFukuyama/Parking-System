@@ -8,7 +8,7 @@ class Member_DAO < Azure_DAO
         sql = "SELECT 会員ID,PLATENo, Area, hiragana 
                 FROM 会員 
                 WHERE PLATENo = '#{number.to_i}'
-                AND Area = (N'#{area.sub(/\s/,"")}')
+                or Area = (N'#{area.sub(/\s/,"")}')
                 AND hiragana = '#{hiragana}';" 
         results = @client.execute(sql)
 #        results.each do |row|

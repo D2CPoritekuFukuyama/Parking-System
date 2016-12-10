@@ -123,6 +123,7 @@ int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
             frame = cvCloneImage(src_img2);
             //ひらがなのトリミング
             cvSetImageROI(frame, Rect(width,55, 50,155));
+			Mat test = frame;
             trimming(frame);
             save_param_img(count);
             param_mat = param_mat.reshape(0, 784); //1行784列に変換
