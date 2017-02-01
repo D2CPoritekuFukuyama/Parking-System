@@ -3,11 +3,8 @@ require 'tiny_tds'
 class Azure_DAO
     attr_reader :clinet
     def initialize()
-        @client = TinyTds::Client.new( 
-            username: "#{ENV['SQL_DATABASE_USERID']}@#{ENV['SQL_DATABASE_SERVER']}.database.windows.net", 
-            password: ENV['SQL_DATABASE_PASSWORD'],  
-            host: "#{ENV['SQL_DATABASE_SERVER']}.database.windows.net", port: 1433,  
-            database: 'ParkingSystem', azure: true)
+        @client = TinyTds::Client.new username: ENV['SQL_DATABASE_USERNAME'], password: ENV['SQL_DATABASE_PASSWORD'], host: ENV['SQL_DATABASE_HOST']
+            
     end
 
     def get_table()
@@ -19,3 +16,5 @@ class Azure_DAO
  
     end
 end
+dao = Azure_DAO.new()
+dao.get_table
