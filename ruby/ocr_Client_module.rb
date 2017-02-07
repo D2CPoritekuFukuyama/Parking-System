@@ -18,7 +18,8 @@ module OCR_Recognize
         # Request body
         request.body = image.read
         
-        response = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+        response = Net::HTTP.start(uri.host, uri.port,
+                                   "192.168.10.30", 8080,                                   :use_ssl => uri.scheme == 'https')do |http|
             http.request(request)
         end
         #puts response.body

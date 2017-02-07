@@ -5,10 +5,11 @@ class Member_DAO < Azure_DAO
     def get_member(number, cate_num, hiragana, area)
 #        sql = "SELECT 会員ID,PLATENo, Area, hiragana 
 #                FROM 会員"
-        sql = "SELECT 会員ID,PLATENo, Area, hiragana 
-                FROM 会員 
-                WHERE PLATENo = '#{number.to_i}'
-                or Area = (N'#{area.sub(/\s/,"")}')
+        puts "hiragana:#{hiragana}"
+        sql = "SELECT Nplate_ID,number, area, hiragana 
+                FROM members_Nplate
+                WHERE number = '#{number.to_i}'
+                AND Area = (N'#{area.sub(/\s/,"")}')
                 AND hiragana = '#{hiragana}';" 
         results = @client.execute(sql)
 #        results.each do |row|
@@ -18,8 +19,8 @@ class Member_DAO < Azure_DAO
     end
 end
 
-#member = Member_DAO.new
-#results = member.get_member("1122", "300", "to", "倉敷")
-#results.each do |row|
-#    puts row
-#end
+member = Member_DAO.new
+results = member.get_member("2456", "301", "to", "福山")
+results.each do |row|
+    puts row
+end

@@ -51,11 +51,11 @@ void Elem_trimming::trimming(IplImage *src_img){
     Mat src_mat = src_img;
     param_mat = Mat::ones(28, 28, CV_8U)*255;
     double ratio = (double)src_mat.cols / src_mat.rows;
-    resize(src_mat, src_mat, Size(), ratio * (18.0 / src_mat.cols), (18.0 / src_mat.rows) );
+    resize(src_mat, src_mat, Size(), (25.0 / src_mat.cols), (25.0 / src_mat.rows) );
     //28x28の白背景の画像に,15x15の画像を描画 (padding = 6)
     for (int row = 0; row < src_mat.rows; row++) {
         for (int col = 0 ; col < src_mat.cols; col ++) {
-            param_mat.at<unsigned char>(row+6,col+8) = src_mat.at<unsigned char>(row, col);
+            param_mat.at<unsigned char>(row,col) = src_mat.at<unsigned char>(row, col);
         }
     }
 
@@ -64,8 +64,8 @@ void Elem_trimming::trimming(IplImage *src_img){
 void Elem_trimming::save_param_img(int count){
     stringstream ss;
     ss << "image/test/" << count << ".jpg";
-//    if(count != 0)
-//        threshold(param_mat, param_mat, 105, 255, THRESH_BINARY);
+   if(count == 0)
+       threshold(param_mat, param_mat, 125, 255, THRESH_BINARY);
 //    else
 //       threshold(param_mat, param_mat, 0, 255, THRESH_BINARY);
     imwrite(ss.str().c_str(), param_mat);
@@ -122,7 +122,7 @@ int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
         if(number_count == 4){
             frame = cvCloneImage(src_img2);
             //ひらがなのトリミング
-            cvSetImageROI(frame, Rect(width,55, 50,155));
+            cvSetImageROI(frame, Rect(width ,80, 50,50));
 			Mat test = frame;
             trimming(frame);
             save_param_img(count);
@@ -134,7 +134,7 @@ int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
             for (count = 1; count <= 4; count++) {
                 if (count == 3)
                     width += 25;
-                cvSetImageROI(frame, Rect(width,55, 60,160));
+                cvSetImageROI(frame, Rect(width,55, 60,155));
                 trimming(frame);
                 save_param_img(count);
                 param_mat = param_mat.reshape(0, 784); //1行784列に変換

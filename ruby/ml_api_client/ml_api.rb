@@ -20,7 +20,7 @@ class ML_api_client < Http_Manager
 
     def initialize(url, api_key)
         @hiragana_list = Array.new
-        File.foreach('ml_api_client/hiragana_list.txt') do |str|            
+        File.foreach('ml_api_client/hiragana_list.txt') do |str| 
             @hiragana_list.push(str)
         end
 
@@ -81,18 +81,23 @@ class ML_api_client < Http_Manager
 #        puts @body.to_json
         @response = Net::HTTP.start(@uri.host,
                                    @uri.port, 
+                                   "192.168.10.30",
+                                   8080,
                                    :use_ssl => @uri.scheme =='https'
                                   )do |http|
             http.request(@request)    
         end
         json = @response.body
         results = JSON.parse(json)
-#        puts results
+        puts results
 		File.unlink("Dataset/Number4.csv")
         result = results['Results']
-#        @hiragana_list[result[0].to_i]
+        puts "json response: #{@hiragana_list[result[0][0].to_i]}"
+        return result
+#        @hiragana_list[result[0][0].to_i]
     end
 end
 
 #hiragana_api_client = ML_api_client.new('https://ussouthcentral.services.azureml.net/workspaces/17636602cf21485babb5f60e96be7642/services/c6e321b758e8497c94c5a6289da5a3bf/execute?api-version=2.0&details=true','HIRAGANA_ML_API_KEY' )
-#puts hiragana_api_client.get_data["Number"]["value"]["Values"]
+#results = hiragana_api_client.get_data
+#p results

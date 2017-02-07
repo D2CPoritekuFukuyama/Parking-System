@@ -16,5 +16,5 @@ class Azure_DAO
  
     end
 end
-dao = Azure_DAO.new()
-dao.get_table
+#dao = Azure_DAO.new()
+#dao.get_table

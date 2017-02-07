@@ -36,7 +36,7 @@ class Nplate_RCG
 			@nPlate.push(category)
 			#ひらがなの取得
 			@nPlate.push(hiragana_api_client.hiragana_list[results["Hiragana"]["value"]["Values"][0][0].to_i])
-			puts @nPlate	
+			p @nPlate
 
         rescue => ex
             p stderr
