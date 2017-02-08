@@ -13,6 +13,7 @@ class Nplate_RCG
     
     def initialize()
         @memberDAO = Member_DAO.new 
+		@hiragana_api_client = ML_api_client.new('https://ussouthcentral.services.azureml.net/workspaces/17636602cf21485babb5f60e96be7642/services/c6e321b758e8497c94c5a6289da5a3bf/execute?api-version=2.0&details=true','HIRAGANA_ML_API_KEY' )
     end
 
     def fetch_car_number
@@ -22,8 +23,7 @@ class Nplate_RCG
 			@nPlate = Array.new()
             stdin, stdout, stderr = Open3.capture3('../Nplate_rcg/main')
 			#画像処理後Datasetのcsvファイルパラメートとしてml_apiへ投げる
-			hiragana_api_client = ML_api_client.new('https://ussouthcentral.services.azureml.net/workspaces/17636602cf21485babb5f60e96be7642/services/c6e321b758e8497c94c5a6289da5a3bf/execute?api-version=2.0&details=true','HIRAGANA_ML_API_KEY' )
-			results = hiragana_api_client.get_data
+			results = @hiragana_api_client.get_data
 			#ナンバーの取得
 			results["Number"]["value"]["Values"].each do |n|
 				number << n[0]
@@ -35,7 +35,7 @@ class Nplate_RCG
 			end
 			@nPlate.push(category)
 			#ひらがなの取得
-			@nPlate.push(hiragana_api_client.hiragana_list[results["Hiragana"]["value"]["Values"][0][0].to_i])
+			@nPlate.push(@hiragana_api_client.hiragana_list[results["Hiragana"]["value"]["Values"][0][0].to_i])
 			p @nPlate
 
         rescue => ex
@@ -64,7 +64,7 @@ class Nplate_RCG
 		puts @area
         if (nPlate[2] != 0 && area != nil)
             result = @memberDAO.get_member(@nPlate[0], @nPlate[1], @nPlate[2], area)
-			puts result
+			p result
             if (result.count == 1 )
                 @is_member = 1
 				result.each do |row|
