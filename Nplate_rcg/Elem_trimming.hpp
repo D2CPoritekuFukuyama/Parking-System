@@ -21,7 +21,7 @@ private:
                          int Level //輪郭のレベル（階層）
     );
     CvSeq *contours;
-    void trimming(IplImage *src_img);
+    void trimming(IplImage *src_img, int count);
     void output_to_csv(int count, Mat src_mat);
     void save_param_img(int count);
     int number_count;
