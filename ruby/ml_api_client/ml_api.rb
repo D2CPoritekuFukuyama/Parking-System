@@ -56,11 +56,13 @@ class ML_api_client < Http_Manager
 		end
        hiragana_params.push(set_value('Dataset/Hiragana.csv'))
        hiragana_params.push(Array.new(785,"0"))
-       category_params.push(set_value('Dataset/Number1.csv'))
-       category_params.push(set_value('Dataset/Number2.csv'))
-       category_params.push(set_value('Dataset/Number3.csv'))
+       category_params.push(Array.new(785,"0"))
+       category_params.push(Array.new(785,"0"))
+#       category_params.push(set_value('Dataset/Number1.csv'))
+#       category_params.push(set_value('Dataset/Number2.csv'))
+#       category_params.push(set_value('Dataset/Number3.csv'))
         #p number_params
-        @body = {            
+        body = {            
             "Inputs" => {
                 "Number" => {
                     "ColumnNames" => @colName,
@@ -77,22 +79,31 @@ class ML_api_client < Http_Manager
             },
             "GlobalParameters" => Hash.new(),
         }  
-        @request.body = @body.to_json
-#        puts @body.to_json
-        @response = Net::HTTP.start(@uri.host,
-                                   @uri.port, 
-                                   "192.168.10.30",
-                                   8080,
-                                   :use_ssl => @uri.scheme =='https'
-                                  )do |http|
-            http.request(@request)    
+        @request.body = body.to_json
+#        puts body.to_json
+        begin
+            @response = Net::HTTP.start(@uri.host,
+                                       @uri.port, 
+                                       "192.168.10.30",
+                                       8080,
+                                       :use_ssl => @uri.scheme =='https'
+                                      )do |http|
+                http.request(@request)    
+            end
+            json = @response.body
+            results = JSON.parse(json)
+            if results.has_key?("error")
+                raise
+            end
+        rescue
+            retry
+        ensure
+        #    puts results
         end
-        json = @response.body
-        results = JSON.parse(json)
-        puts results
-		File.unlink("Dataset/Number4.csv")
+
+		File.unlink("Dataset/Number4.csv")        
         result = results['Results']
-        puts "json response: #{@hiragana_list[result[0][0].to_i]}"
+        #puts "json response: #{@hiragana_list[result[0][0].to_i]}"
         return result
 #        @hiragana_list[result[0][0].to_i]
     end
