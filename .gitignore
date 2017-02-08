@@ -1,8 +1,8 @@
 Nplate_rcg/demo
-!image
 **/*DS_Store
 **/**csv
 *.jpg
+!image
 Dataset/
 openCVtest1.xcodeproj/
 Nplate_rcg/main
