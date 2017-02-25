@@ -25,7 +25,7 @@ protected:
                                  int Level //輪郭のレベル（階層）
     ) =0;
     void Binarization();
-    virtual void trimming(IplImage *src_img)=0;
+    void trimming(IplImage *src_img);
     void cv_Labelling(CvSeq **contours, IplImage *src_img);
     void cv_ColorExtraction(IplImage* src_img, IplImage* dst_img,
                             int code,

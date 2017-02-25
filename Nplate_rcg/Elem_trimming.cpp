@@ -73,7 +73,7 @@ void Elem_trimming::trimming(IplImage *src_img, int count){
 
 void Elem_trimming::save_param_img(int count){
     stringstream ss;
-    ss << "image/test/" << count << ".jpg";
+    ss << "Dataset/" << count << ".jpg";
 // if(count == 0)
 //     threshold(param_mat, param_mat, 140, 255, THRESH_BINARY);
 //    else
@@ -138,7 +138,7 @@ int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
             save_param_img(count);
             param_mat = param_mat.reshape(0, 784); //1行784列に変換
             cvResetImageROI(frame);
-            output_to_csv(count, param_mat);
+            //output_to_csv(count, param_mat);
             //ナンバーのトリミング
             width = 50;
             for (count = 1; count <= 4; count++) {
@@ -149,7 +149,7 @@ int Elem_trimming::get_elem(IplImage *src_img1, IplImage *src_img2){
                 save_param_img(count);
                 param_mat = param_mat.reshape(0, 784); //1行784列に変換
                 cvResetImageROI(frame);
-                output_to_csv(count, param_mat);
+                //output_to_csv(count, param_mat);
                 width += 55;
             }
         }

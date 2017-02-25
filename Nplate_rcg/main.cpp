@@ -20,7 +20,7 @@ using namespace std;
 int main (int argc, char **argv)
 {
     struct stat st;
-    const char* file = "./Dataset/Number4.csv";
+    const char* file = "./Dataset/4.jpg";
     Nplate_trim nplate_trim = Nplate_trim(); //ナンバープレート検出のクラス
     Elem_trimming elem_trimming = Elem_trimming();
     if(nplate_trim.videoCapture  == NULL )
