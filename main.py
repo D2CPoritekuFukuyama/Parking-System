@@ -9,7 +9,7 @@ EXT_HOLE_SENSOR = 22 #出口用ホールセンサー
 GATE_SWITCH = 23 #ゲートのスイッチ
 GATE_STATUS = True #True=open, False=close
 
-def gate_close():
+def gate_actuation():
     #チャタリング防止コード---------------
     wp.delay(50)
     if wp.digitalRead(23) != 1:
@@ -33,7 +33,7 @@ wp.pinMode(EXT_HOLE_SENSOR, wp.GPIO.INPUT)
 #ゲートのスイッチのGPIO4を入力で初期化
 wp.pinMode(GATE_SWITCH, wp.GPIO.INPUT)
 #ゲートスイッチの割り込み処理を設定
-wp.wiringPiISR(GATE_SWITCH, wp.GPIO.INT_EDGE_BOTH, gate_close)
+wp.wiringPiISR(GATE_SWITCH, wp.GPIO.INT_EDGE_BOTH, gate_actuation)
 
 while True:
     if wp.digitalRead(ENT_HOLE_SENSOR) == 0:
