@@ -1,8 +1,0 @@
-#!/bin/sh
-
-if [ -e ./Dataset/Number4.csv ]; then
-    rm -f ./Dataset/Number4.csv
-    sudo -E rbenv exec ruby main.rb
-else
-    sudo -E rbenv exec ruby main.rb
-fi
