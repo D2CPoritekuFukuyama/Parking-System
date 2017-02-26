@@ -3,6 +3,7 @@
 
 import os
 import wiringpi2 as wp
+import ml_module
 
 ENT_HOLE_SENSOR = 17 #入り口用ホールセンサー
 EXT_HOLE_SENSOR = 22 #出口用ホールセンサー
@@ -24,6 +25,8 @@ def gate_actuation():
         os.system('./motor/gate_open')
         GATE_STATUS=True 
 
+#kerasのモデルの初期化
+Nplate_reader = ml_module.ML_module()
 #GPIOの初期化
 wp.wiringPiSetupGpio()
 #入り口のホールセンサー用GPIO0を入力で初期化
@@ -38,3 +41,6 @@ wp.wiringPiISR(GATE_SWITCH, wp.GPIO.INT_EDGE_BOTH, gate_actuation)
 while True:
     if wp.digitalRead(ENT_HOLE_SENSOR) == 0:
         os.system('./Nplate_rcg/main')
+        Nplate_reader.read_Nplate()
+        print(Nplate_reader.Nplate)
+        os.remove('./Dataset/4.jpg')
