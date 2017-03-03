@@ -45,11 +45,12 @@ int main (int argc, char **argv)
 #endif			
      		}
 		}
-        if(stat(file, &st) == 0)
+        if(stat(file, &st) == 0){        
+            cout << "トリミング成功" << endl;
             break;
-            //cout << "トリミング成功" << endl;
-        else
-            cout << "トリミング失敗" << endl;
+        }
+        //else
+        //    cout << "トリミング失敗" << endl;
         
         if (waitKey(1) == 0x71) {
             break;

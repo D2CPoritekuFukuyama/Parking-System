@@ -15,10 +15,10 @@ import os.path
 
 class ML_module():
     f_model = './model'
-    number_model_filename = 'number_model.json'
-    hiragana_model_filename = 'hiragana_model.json'
-    number_weights_filename = 'number_param.hdf5'
-    hiragana_weights_filename = 'hiragana_param.hdf5'
+    number_model_filename = 'number_model_100epoch.json'
+    hiragana_model_filename = 'hiragana_model_4conv.json'
+    number_weights_filename = 'number_param_100epoch.hdf5'
+    hiragana_weights_filename = 'hiragana_param_4conv.hdf5'
 
     def __init__(self):
         global f_model
@@ -76,7 +76,7 @@ class ML_module():
         self.Nplate['hiragana'] = self.hiragana_list[classes[0]]
 
     def __read_place_name(self):
-        self.Nplate['place_name'] = '福山'
+        self.Nplate['place_name'] = '岡山'
 
     def read_Nplate(self):
         self.__read_number()
@@ -89,6 +89,9 @@ if __name__=='__main__':
     image_file = "Dataset/4.jpg"
     Nplate_reader = ml_module.ML_module()
     print('start classtering')
-    Nplate_reader.read_Nplate()
-    print(Nplate_reader.Nplate)
+    while True:
+        os.system('./Nplate_rcg/main')
+        Nplate_reader.read_Nplate()
+        print(Nplate_reader.Nplate)
+        os.remove('./Dataset/4.jpg')        
     quit()

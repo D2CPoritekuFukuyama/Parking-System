@@ -48,27 +48,38 @@ void Elem_trimming::DrawNextContour(
 }
 
 void Elem_trimming::trimming(IplImage *src_img, int count){
-    Mat src_mat = src_img;
+//    Mat src_mat = src_img;
+//    param_mat = Mat::ones(28, 28, CV_8U)*255;
+//    if(count == 0){
+//        //ひらがなの時
+//        resize(src_mat, src_mat, Size(), (20.0 / src_mat.cols), (20.0 / src_mat.rows) );
+//        //28x28の白背景の画像に,15x15の画像を描画 
+//        for (int row = 0; row < src_mat.rows; row++) {
+//            for (int col = 0 ; col < src_mat.cols; col ++) {
+//                param_mat.at<unsigned char>(row+5,col+5) = src_mat.at<unsigned char>(row, col);
+//            }
+//        }
+//    }else{
+//        //数字の時
+//        resize(src_mat, src_mat, Size(), (12.0 / src_mat.cols), (22.0 / src_mat.rows) );
+//        //28x28の白背景の画像に,15x15の画像を描画 
+//        for (int row = 0; row < src_mat.rows; row++) {
+//            for (int col = 0 ; col < src_mat.cols; col ++) {
+//                param_mat.at<unsigned char>(row+2,col+4) = src_mat.at<unsigned char>(row , col );
+//            }
+//        }
+//    }
+   Mat src_mat = src_img;
     param_mat = Mat::ones(28, 28, CV_8U)*255;
-    if(count == 0){
-        //ひらがなの時
-        resize(src_mat, src_mat, Size(), (20.0 / src_mat.cols), (20.0 / src_mat.rows) );
-        //28x28の白背景の画像に,15x15の画像を描画 
-        for (int row = 0; row < src_mat.rows; row++) {
-            for (int col = 0 ; col < src_mat.cols; col ++) {
-                param_mat.at<unsigned char>(row+5,col+5) = src_mat.at<unsigned char>(row, col);
-            }
-        }
-    }else{
-        //数字の時
-        resize(src_mat, src_mat, Size(), (25.0 / src_mat.cols), (25.0 / src_mat.rows) );
-        //28x28の白背景の画像に,15x15の画像を描画 
-        for (int row = 0; row < src_mat.rows; row++) {
-            for (int col = 0 ; col < src_mat.cols; col ++) {
-                param_mat.at<unsigned char>(row,col) = src_mat.at<unsigned char>(row, col);
-            }
+    double ratio = (double)src_mat.cols / src_mat.rows;
+    resize(src_mat, src_mat, Size(), ratio * (19.0 / src_mat.cols), (19.0 / src_mat.rows) );
+    //28x28の白背景の画像に,15x15の画像を描画 (padding = 6)
+    for (int row = 0; row < src_mat.rows; row++) {
+        for (int col = 0 ; col < src_mat.cols; col ++) {
+            param_mat.at<unsigned char>(row+3,col+8) = src_mat.at<unsigned char>(row, col);
         }
     }
+
 }
 
 void Elem_trimming::save_param_img(int count){
