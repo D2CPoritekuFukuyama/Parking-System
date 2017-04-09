@@ -4,6 +4,7 @@
 Dataset/
 openCVtest1.xcodeproj/
 Nplate_rcg/main
+Nplate_rcg/demo
 **/*test*
 !motor_test
 Nplate_rcg/image

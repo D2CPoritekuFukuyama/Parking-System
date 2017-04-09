@@ -26,13 +26,21 @@ class ML_api_client < Http_Manager
 
         super
 
-        #input label の作成
-        @colName = Array.new 
+        #数字認識用input label の作成
+        @num_col_name = Array.new 
         784.times do |col|
-            name = "Pixel" + col.to_s
-            @colName.push(name)
+#            name =  col.to_s
+            @num_col_name.push(col.to_s)
         end
-        @colName.push("label")
+        @num_col_name.push("label")
+
+        #ひらがな認識用input label の作成
+        @hiragana_col_name = Array.new 
+        784.times do |col|
+            name =  "Pixel" + col.to_s
+            @hiragana_col_name.push(name)
+        end
+        @hiragana_col_name.push("label")
     end
 
     def set_value(file_name)
@@ -63,15 +71,15 @@ class ML_api_client < Http_Manager
         @body = {            
             "Inputs" => {
                 "Number" => {
-                    "ColumnNames" => @colName,
+                    "ColumnNames" => @num_col_name,
                     "Values" => number_params,
                 },
                 "Category_Number" =>{
-                    "ColumnNames" => @colName,
+                    "ColumnNames" => @num_col_name,
                     "Values" => category_params,
                 },
                 "Hiragana"=>{
-                    "ColumnNames" => @colName,
+                    "ColumnNames" => @hiragana_col_name,
                     "Values"=> hiragana_params,
                 },
             },
@@ -87,12 +95,13 @@ class ML_api_client < Http_Manager
         end
         json = @response.body
         results = JSON.parse(json)
-#        puts results
+        puts results
 		File.unlink("Dataset/Number4.csv")
-        result = results['Results']
+#        result = results['Results']
 #        @hiragana_list[result[0].to_i]
     end
 end
 
 #hiragana_api_client = ML_api_client.new('https://ussouthcentral.services.azureml.net/workspaces/17636602cf21485babb5f60e96be7642/services/c6e321b758e8497c94c5a6289da5a3bf/execute?api-version=2.0&details=true','HIRAGANA_ML_API_KEY' )
+#
 #puts hiragana_api_client.get_data["Number"]["value"]["Values"]

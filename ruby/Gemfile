@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 
 gem 'wiringpi2' # https://github.com/WiringPi/WiringPi-Ruby
+gem 'fssm'

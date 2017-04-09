@@ -7,11 +7,11 @@ class Azure_DAO
             username: "#{ENV['SQL_DATABASE_USERID']}@#{ENV['SQL_DATABASE_SERVER']}.database.windows.net", 
             password: ENV['SQL_DATABASE_PASSWORD'],  
             host: "#{ENV['SQL_DATABASE_SERVER']}.database.windows.net", port: 1433,  
-            database: 'ParkingSystem', azure: true)
+            database: "#{ENV['SQL_DATABASE_NAME']}", azure: true)
     end
 
     def get_table()
-        sql = "SELECT name FROM sysobjects WHERE xtype = 'U';"
+        sql = "SELECT * FROM dbo.会員;"
         results = @client.execute(sql)
         results.each do |row|
             puts row 
@@ -19,3 +19,6 @@ class Azure_DAO
  
     end
 end
+
+test = Azure_DAO.new
+test.get_table

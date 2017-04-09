@@ -5,9 +5,9 @@ class Member_DAO < Azure_DAO
     def get_member(number, cate_num, hiragana, area)
 #        sql = "SELECT 会員ID,PLATENo, Area, hiragana 
 #                FROM 会員"
-        sql = "SELECT 会員ID,PLATENo, Area, hiragana 
-                FROM 会員 
-                WHERE PLATENo = '#{number.to_i}'
+        sql = "SELECT id,PLATENo1, Area, hiragana 
+                FROM dbo.会員 
+                WHERE PLATENo1 = '#{number.to_i}'
                 or Area = (N'#{area.sub(/\s/,"")}')
                 AND hiragana = '#{hiragana}';" 
         results = @client.execute(sql)
